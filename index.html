@@ -1269,73 +1269,100 @@
       .amenity { border-right: 0 !important; }
     }
 
-    /* ── Contact form ────────────────────────────────────────── */
-    .contact__form-wrap {
-      margin-top: 2.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
+    /* ── Visit modal ─────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .contact__form-intro {
+    .modal-overlay.open {
+      opacity: 1; pointer-events: all;
+    }
+    .modal-card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: clamp(2rem, 5vw, 3rem);
+      width: 100%; max-width: 480px;
+      position: relative;
+      transform: translateY(20px) scale(0.98);
+      transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+    }
+    .modal-overlay.open .modal-card {
+      transform: translateY(0) scale(1);
+    }
+    .modal-close {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      background: none; border: none; cursor: pointer;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--stone); font-size: 18px; line-height: 1;
+      transition: background var(--t-fast);
+    }
+    .modal-close:hover { background: var(--beige); }
+    .modal-eyebrow {
       font-family: var(--sans);
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      font-size: 0.68rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--moss);
+      margin-bottom: 0.6rem;
+    }
+    .modal-title {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 3vw, 1.9rem);
+      font-style: italic; font-weight: 400;
+      line-height: 1.15; margin-bottom: 0.35rem;
+    }
+    .modal-ref {
+      font-size: 0.78rem; color: var(--stone);
+      margin-bottom: 2rem;
+    }
+    .mf { display: flex; flex-direction: column; gap: 1.4rem; }
+    .mf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 520px) { .mf-row { grid-template-columns: 1fr; } }
+    .mf-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .mf-label {
+      font-family: var(--sans); font-size: 0.68rem;
+      letter-spacing: 0.13em; text-transform: uppercase;
       color: var(--stone);
-      margin-bottom: 1.75rem;
     }
-    .contact__form { display: flex; flex-direction: column; gap: 1.4rem; }
-    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
-    @media (max-width: 640px) { .cf-row { grid-template-columns: 1fr; } }
-    .cf-field { display: flex; flex-direction: column; gap: 0.45rem; }
-    .cf-label {
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: var(--stone);
-    }
-    .cf-input {
-      font-family: var(--sans);
-      font-size: 0.95rem;
-      color: var(--ink);
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--line-strong);
-      padding: 0.55rem 0;
-      outline: none;
+    .mf-input {
+      font-family: var(--sans); font-size: 0.92rem;
+      color: var(--ink); background: transparent;
+      border: none; border-bottom: 1px solid var(--line-strong);
+      padding: 0.5rem 0; outline: none; width: 100%;
       transition: border-color var(--t-fast) var(--ease-out);
-      width: 100%;
-      resize: none;
-      -webkit-appearance: none;
+      -webkit-appearance: none; resize: none;
     }
-    .cf-input:focus { border-bottom-color: var(--moss); }
-    .cf-input::placeholder { color: var(--stone-3); }
-    .cf-textarea { min-height: 72px; }
-    .cf-submit {
-      width: 100%;
-      justify-content: center;
-      cursor: pointer;
+    .mf-input:focus { border-bottom-color: var(--moss); }
+    .mf-input::placeholder { color: var(--stone-3); }
+    .mf-textarea { min-height: 68px; }
+    .mf-submit {
+      width: 100%; justify-content: center;
+      cursor: pointer; border: none;
       font-family: var(--sans);
-      border: none;
       margin-top: 0.5rem;
     }
-    .cf-submit:disabled { opacity: 0.55; cursor: not-allowed; }
-    .cf-success {
-      padding: 0.85rem 1.1rem;
-      background: #f4faf4;
-      border: 1px solid #b8ddb8;
-      border-radius: 6px;
-      font-size: 0.88rem;
-      color: #2d6b2d;
-      line-height: 1.5;
+    .mf-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .mf-success {
+      text-align: center; padding: 1.5rem 0;
     }
-    .cf-error {
-      padding: 0.85rem 1.1rem;
-      background: #fff4f4;
-      border: 1px solid #f0b8b8;
-      border-radius: 6px;
-      font-size: 0.88rem;
-      color: #a00;
+    .mf-success-icon {
+      font-size: 2rem; margin-bottom: 0.75rem; display: block;
+    }
+    .mf-success-title {
+      font-family: var(--display); font-style: italic;
+      font-size: 1.3rem; margin-bottom: 0.5rem;
+    }
+    .mf-success-sub { font-size: 0.88rem; color: var(--stone); line-height: 1.5; }
+    .mf-error {
+      padding: 0.75rem 1rem;
+      background: #fff4f4; border: 1px solid #f0b8b8;
+      border-radius: 6px; font-size: 0.85rem; color: #a00;
     }
   </style>
 </head>
@@ -2155,15 +2182,6 @@
                   <span class="contact__line-label">Bureau</span>
                   <span class="contact__line-value">+32 (0)2 808 03 64</span>
                 </a>
-
-            <div class="contact__form-wrap">
-              <p class="contact__form-intro">Ou envoyez-nous un message</p>
-              <form class="contact__form" id="contact-form" novalidate>
-                <div class="cf-row">
-                  <div class="cf-field">
-                    <label class="cf-label" for="cf-name">Nom complet *</label>
-                    <input class="cf-input" type="text" id="cf-name" name="name" placeholder="Jean Dupont" autocomplete="name" required>
-                  </div>
                   <div class="cf-field">
                     <label class="cf-label" for="cf-email">E-mail *</label>
                     <input class="cf-input" type="email" id="cf-email" name="email" placeholder="jean@exemple.be" autocomplete="email" required>
@@ -2205,6 +2223,7 @@
             <a
               href="mailto:sk@christiesrealestatebelgium.be?subject=Demande de visite — Villa Rhode-Saint-Genèse"
               class="contact__cta-pill"
+              id="visit-cta"
             >
               <span>Demander une visite</span>
               <span class="contact__cta-arrow" aria-hidden="true">→</span>
@@ -2213,7 +2232,54 @@
         </div>
       </div>
     </section>
-  </main>
+  
+  <!-- ── VISIT MODAL ─────────────────────────────────────── -->
+  <div class="modal-overlay" id="visit-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <button class="modal-close" id="modal-close" aria-label="Fermer">✕</button>
+
+      <!-- Default state: form -->
+      <div id="modal-form-wrap">
+        <p class="modal-eyebrow">— Visite privée</p>
+        <h2 class="modal-title" id="modal-title">Demander une visite</h2>
+        <p class="modal-ref">Villa Rhode-Saint-Genèse · Réf. 12/0339 · Sylvie Koch</p>
+
+        <form class="mf" id="modal-form" novalidate>
+          <div class="mf-row">
+            <div class="mf-field">
+              <label class="mf-label" for="mf-name">Nom complet *</label>
+              <input class="mf-input" type="text" id="mf-name" placeholder="Jean Dupont" autocomplete="name" required>
+            </div>
+            <div class="mf-field">
+              <label class="mf-label" for="mf-phone">Téléphone</label>
+              <input class="mf-input" type="tel" id="mf-phone" placeholder="+32 4xx xx xx xx" autocomplete="tel">
+            </div>
+          </div>
+          <div class="mf-field">
+            <label class="mf-label" for="mf-email">E-mail *</label>
+            <input class="mf-input" type="email" id="mf-email" placeholder="jean@exemple.be" autocomplete="email" required>
+          </div>
+          <div class="mf-field">
+            <label class="mf-label" for="mf-message">Message</label>
+            <textarea class="mf-input mf-textarea" id="mf-message" placeholder="Vos disponibilités, questions…"></textarea>
+          </div>
+          <div class="mf-error" id="mf-error" style="display:none"></div>
+          <button type="submit" class="contact__cta-pill mf-submit" id="mf-btn">
+            <span id="mf-btn-text">Envoyer ma demande</span>
+            <span class="contact__cta-arrow" aria-hidden="true">→</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success state -->
+      <div class="mf-success" id="modal-success" style="display:none">
+        <span class="mf-success-icon">✓</span>
+        <p class="mf-success-title">Message envoyé</p>
+        <p class="mf-success-sub">Sylvie Koch vous contactera dans les plus brefs délais.<br>Réf. 12/0339 · Christie's International Real Estate</p>
+      </div>
+    </div>
+  </div>
+</main>
 
   <!-- ─────────────────────────────────────────────────────────
        FOOTER
@@ -2787,30 +2853,60 @@
       }).catch(function() {});
     }
 
+    // ── Page view
     track('page_view');
 
-    // Only the contact form counts as an enquiry
-    var ctaPill = document.querySelector('.contact__cta-pill:not(.cf-submit)');
-    if (ctaPill) ctaPill.addEventListener('click', function() { track('demander_visite'); });
+    // ── Modal open/close
+    var overlay   = document.getElementById('visit-modal');
+    var openBtn   = document.getElementById('visit-cta');
+    var closeBtn  = document.getElementById('modal-close');
 
-    // Contact form submission
-    var form = document.getElementById('contact-form');
+    function openModal() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      track('modal_open');
+      setTimeout(function() {
+        var first = document.getElementById('mf-name');
+        if (first) first.focus();
+      }, 360);
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    if (openBtn)  openBtn.addEventListener('click', function(e) { e.preventDefault(); openModal(); });
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ── Form submit
+    var form = document.getElementById('modal-form');
     if (form) {
       form.addEventListener('submit', function(e) {
         e.preventDefault();
-        var name  = document.getElementById('cf-name').value.trim();
-        var email = document.getElementById('cf-email').value.trim();
+        var name  = document.getElementById('mf-name').value.trim();
+        var email = document.getElementById('mf-email').value.trim();
+        var errEl = document.getElementById('mf-error');
+        errEl.style.display = 'none';
+
         if (!name || !email) {
-          var errEl = document.getElementById('cf-error');
           errEl.textContent = 'Veuillez renseigner votre nom et e-mail.';
           errEl.style.display = 'block';
           return;
         }
-        var btn = document.getElementById('cf-btn');
-        var btnText = document.getElementById('cf-btn-text');
+
+        var btn     = document.getElementById('mf-btn');
+        var btnText = document.getElementById('mf-btn-text');
         btn.disabled = true;
-        btnText.textContent = 'Envoi en cours…';
-        document.getElementById('cf-error').style.display = 'none';
+        btnText.textContent = 'Envoi…';
 
         fetch(SB_URL + '/rest/v1/leads', {
           method: 'POST',
@@ -2824,20 +2920,19 @@
             page_id:    PAGE_ID,
             name:       name,
             email:      email,
-            phone:      document.getElementById('cf-phone').value.trim(),
-            message:    document.getElementById('cf-message').value.trim(),
+            phone:      document.getElementById('mf-phone').value.trim(),
+            message:    document.getElementById('mf-message').value.trim(),
             visitor_id: getVisitorId()
           })
         }).then(function(r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
           track('form_submit');
-          form.style.display = 'none';
-          document.getElementById('cf-success').style.display = 'block';
+          document.getElementById('modal-form-wrap').style.display = 'none';
+          document.getElementById('modal-success').style.display   = 'block';
         }).catch(function() {
           btn.disabled = false;
           btnText.textContent = 'Envoyer ma demande';
-          var errEl = document.getElementById('cf-error');
-          errEl.textContent = 'Une erreur est survenue. Veuillez nous contacter directement par e-mail.';
+          errEl.textContent = 'Une erreur est survenue. Veuillez nous contacter directement.';
           errEl.style.display = 'block';
         });
       });
