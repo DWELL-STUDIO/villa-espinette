@@ -2643,5 +2643,46 @@
     })();
   </script>
 
+  <!-- DWELL Analytics -->
+  <script>
+  (function() {
+    var SB_URL = 'https://kdzkffcqmutwojyauqtj.supabase.co';
+    var SB_KEY = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
+    var PAGE_ID = 'villa-espinette';
+
+    function getDevice() {
+      var ua = navigator.userAgent;
+      if (/tablet|ipad/i.test(ua)) return 'tablet';
+      if (/mobi|android/i.test(ua)) return 'mobile';
+      return 'desktop';
+    }
+
+    function track(event_type) {
+      fetch(SB_URL + '/rest/v1/events', {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          page_id: PAGE_ID,
+          event_type: event_type,
+          device: getDevice(),
+          referrer: document.referrer || 'direct'
+        })
+      }).catch(function() {});
+    }
+
+    track('page_view');
+
+    var navCta = document.querySelector('.nav__cta');
+    if (navCta) navCta.addEventListener('click', function() { track('nav_cta_click'); });
+
+    var ctaPill = document.querySelector('.contact__cta-pill');
+    if (ctaPill) ctaPill.addEventListener('click', function() { track('demander_visite'); });
+  })();
+  </script>
 </body>
 </html>
