@@ -1579,21 +1579,36 @@ em {
   letter-spacing: 0.02em;
 }
 
+/* Galerie en grille UNIFORME — toutes les tuiles à la même taille
+   et au même ratio (4:3). Plus de pattern asymétrique. */
 .gallery__grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: 18vw;
+  grid-template-columns: repeat(4, 1fr);
   gap: clamp(0.75rem, 1.2vw, 1.25rem);
 }
 .gallery__item {
+  position: relative;
   overflow: hidden;
   border-radius: 4px;
-  background: var(--canvas);
+  background: var(--paper);
+  padding: clamp(6px, 0.7vw, 11px);
+  box-sizing: border-box;
+  aspect-ratio: 4 / 3;
   opacity: 0;
   transform: translateY(20px);
   transition:
     opacity var(--t-slow) var(--ease-out),
     transform var(--t-slow) var(--ease-out);
+  /* Toutes les variantes de span sont neutralisées : chaque cellule
+     occupe exactement 1 colonne / 1 ligne. */
+  grid-column: span 1 !important;
+  grid-row: span 1 !important;
+  box-shadow: 0 1px 6px -2px rgba(0, 0, 0, 0.10);
+  /* --gz : zoom de l'image dans son cadre. 1.18 par défaut pour
+     compenser les variations de cadrage (certaines images AI ont
+     une marge interne, le zoom rapproche le sujet pour uniformiser
+     la taille apparente). Override par nth-child plus bas. */
+  --gz: 1.18;
 }
 .gallery__item.is-in {
   opacity: 1;
@@ -1603,39 +1618,72 @@ em {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.5s var(--ease-out);
+  display: block;
+  transform: scale(var(--gz));
+  transition: transform 1.6s var(--ease-out);
 }
-.gallery__item:hover img { transform: scale(1.04); }
+.gallery__item:hover img {
+  transform: scale(calc(var(--gz) + 0.05));
+}
 
-/* Pattern asymétrique : on alterne tailles / spans pour un rythme éditorial.
-   Les classes sont ajoutées par script.js. */
-.gallery__item--xl { grid-column: span 8; grid-row: span 1; }
-.gallery__item--lg { grid-column: span 6; grid-row: span 1; }
-.gallery__item--md { grid-column: span 4; grid-row: span 1; }
-.gallery__item--sm { grid-column: span 4; grid-row: span 1; }
-.gallery__item--tall { grid-column: span 4; grid-row: span 1; }
-.gallery__item--wide { grid-column: span 8; grid-row: span 1; }
+/* Ajustements par image après audit visuel des 36 vues.
+   Trois tiers pour homogénéiser l'échelle apparente du sujet :
+   - HIGH (1.32) : drone, plans larges, sujet lointain
+   - MID  (1.18) : sujet moyen, valeur par défaut
+   - LOW  (1.05) : sujet déjà tightement cadré, on ne zoome quasi pas */
+.gallery__item:nth-child(1)  img,   /* villa au loin sur pelouse */
+.gallery__item:nth-child(2)  img,   /* extension noire face         */
+.gallery__item:nth-child(3)  img,   /* jardin + champs au loin      */
+.gallery__item:nth-child(9)  img,   /* extension noire 3/4          */
+.gallery__item:nth-child(23) img,   /* entrée KATE MOSS — sujet petit */
+.gallery__item:nth-child(26) img,   /* garage noir distant + gravier */
+.gallery__item:nth-child(27) img,   /* cour de gravier              */
+.gallery__item:nth-child(30) img {  /* drone aérien village         */
+  --gz: 1.32;
+}
+
+.gallery__item:nth-child(4)  img,   /* salon bulldog                */
+.gallery__item:nth-child(5)  img,   /* chairs minimaux              */
+.gallery__item:nth-child(6)  img,   /* salon cheminée               */
+.gallery__item:nth-child(8)  img,   /* cuisine                      */
+.gallery__item:nth-child(13) img,   /* chambre étage                */
+.gallery__item:nth-child(14) img,   /* bureau                       */
+.gallery__item:nth-child(15) img,   /* salle de bains miroir        */
+.gallery__item:nth-child(16) img,   /* bath moderne                 */
+.gallery__item:nth-child(18) img,   /* salle de bains mosaïque      */
+.gallery__item:nth-child(19) img,   /* cave à vins                  */
+.gallery__item:nth-child(21) img,   /* garage Ami + vélos           */
+.gallery__item:nth-child(22) img,   /* couloir dressing             */
+.gallery__item:nth-child(32) img,   /* contre-jour rasant           */
+.gallery__item:nth-child(33) img {  /* piscine cadrée serré         */
+  --gz: 1.05;
+}
+
+.gallery__item:nth-child(7)  img,   /* terrasse table champs        */
+.gallery__item:nth-child(10) img,   /* chemin gravier               */
+.gallery__item:nth-child(11) img,   /* foyer porte vitrée           */
+.gallery__item:nth-child(12) img,   /* chambre verte                */
+.gallery__item:nth-child(17) img,   /* chambre minimal              */
+.gallery__item:nth-child(20) img,   /* ping pong                    */
+.gallery__item:nth-child(24) img,   /* piscine + villa loin         */
+.gallery__item:nth-child(25) img,   /* drone piscine top down       */
+.gallery__item:nth-child(28) img,   /* piscine + basket             */
+.gallery__item:nth-child(29) img,   /* villa + chien + fleurs       */
+.gallery__item:nth-child(31) img,   /* maison 3/4                   */
+.gallery__item:nth-child(34) img,   /* villa crépuscule             */
+.gallery__item:nth-child(35) img,   /* piscine de nuit + basket     */
+.gallery__item:nth-child(36) img {  /* drone piscine nuit           */
+  --gz: 1.18;
+}
 
 @media (max-width: 1100px) {
-  .gallery__grid { grid-auto-rows: 22vw; }
-  .gallery__item--xl { grid-column: span 12; }
-  .gallery__item--lg { grid-column: span 8; }
-  .gallery__item--md { grid-column: span 6; }
-  .gallery__item--sm { grid-column: span 6; }
-  .gallery__item--tall { grid-column: span 6; }
-  .gallery__item--wide { grid-column: span 12; }
+  .gallery__grid { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 640px) {
-  .gallery__grid { grid-template-columns: 1fr; grid-auto-rows: 60vw; gap: 0.5rem; }
-  .gallery__item--xl,
-  .gallery__item--lg,
-  .gallery__item--md,
-  .gallery__item--sm,
-  .gallery__item--tall,
-  .gallery__item--wide {
-    grid-column: 1 / -1;
-    grid-row: span 1;
-  }
+@media (max-width: 720px) {
+  .gallery__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .gallery__grid { grid-template-columns: 1fr; gap: 0.5rem; }
   .gallery__title { font-size: clamp(2rem, 8.5vw, 3.4rem); max-width: none; }
   .gallery__sub { font-size: 0.8rem; }
 }
@@ -2438,81 +2486,11 @@ body.am-modal-open { overflow: hidden; }
    Petit point exact + grande bague qui suit (lerp en JS).
    Désactivé sur écrans tactiles & "reduce motion".
    ─────────────────────────────────────────────────────────────── */
-/* Curseur natif TOTALEMENT masqué PARTOUT, sans condition @media —
-   on garde UNIQUEMENT le custom. Le !important écrase tous les
-   cursor: pointer / ew-resize / zoom-out / text posés ailleurs. */
-html, body, *, *::before, *::after { cursor: none !important; }
-
-/* Sur tactile, on restaure le curseur natif (il n'y en a pas, mais
-   on évite que les écrans hybrides Surface/Chromebook touch perdent
-   le pointeur natif lorsqu'ils utilisent un stylet). */
-@media (hover: none), (pointer: coarse) {
-  html, body, *, *::before, *::after { cursor: auto !important; }
-  a, button, [role="button"], [data-amenity], [data-space],
-  .dn-toggle, .dn-compare__knob, .dn-compare__handle,
-  .gallery__item, .am-modal__close, .am-modal__backdrop,
-  .sp-modal__close, .sp-modal__backdrop, .sp-modal__nav, .sp-modal__thumb {
-    cursor: pointer !important;
-  }
-  input, textarea { cursor: text !important; }
-}
-
-.cursor {
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  /* Au-dessus de TOUT (modals, nav, hero vidéo, backdrop-filter…) */
-  z-index: 2147483647;
-  transform: translate3d(-100px, -100px, 0);
-  will-change: transform;
-  isolation: isolate;
-  /* Toujours pleinement visible — aucun code ne doit pouvoir la masquer. */
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-/* L'attribut hidden initial est neutralisé dès que le JS s'exécute ;
-   pour les utilisateurs sans JS on garde le natif (cf. @media tactile). */
-.cursor[hidden] { display: none; }
-
-.cursor__dot,
-.cursor__ring {
-  position: absolute;
-  top: 50%; left: 50%;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-/* Point : blanc avec contour noir — visible sur tout fond. */
-.cursor__dot {
-  width: 8px;
-  height: 8px;
-  background: #ffffff;
-  border: 1.2px solid rgba(0, 0, 0, 0.85);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-/* Bague : blanche + ombre noire interne et externe — toujours lisible. */
-.cursor__ring {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid #ffffff;
-  background: transparent;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55),
-              inset 0 0 0 1px rgba(0, 0, 0, 0.35);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* États : le tout reste visible, on ne joue que sur l'échelle. */
-.cursor.is-hover .cursor__ring  { transform: translate(-50%, -50%) scale(1.35); }
-.cursor.is-hover .cursor__dot   { transform: translate(-50%, -50%) scale(1.2); }
-.cursor.is-down  .cursor__ring  { transform: translate(-50%, -50%) scale(0.92); }
-
-/* Vrais tactiles → on cache le custom (le bloc plus haut rétablit déjà
-   le cursor natif sur la même condition). La réduction d'animations
-   N'ENTRE PAS dans la condition : elle ne doit pas faire disparaître
-   le curseur. */
-@media (hover: none), (pointer: coarse) {
-  .cursor { display: none !important; }
-}
+/* Curseur 100 % natif sur tout le site — aucun custom cursor, aucune
+   règle qui masque le pointeur du navigateur. Les éléments interactifs
+   reçoivent leur cursor par défaut (pointer / text / ew-resize…). */
+.cursor { display: none !important; }
+html, body { cursor: auto; }
 
 /* ───────────────────────────────────────────────────────────────
    ATLAS — "La villa, en quatre atmosphères." (2 × 2 grandes tuiles)

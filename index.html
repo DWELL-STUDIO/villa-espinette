@@ -258,6 +258,7 @@
     /* Voile dégradé inutile dans ce nouveau layout */
     .strip__sticky::after { display: none; }
 
+    
     /* Vidéo : petit cadre à droite, secondaire au texte */
     .strip .strip__video {
       position: relative !important;
@@ -505,6 +506,16 @@
     .ff-card__video {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; display: block; pointer-events: none;
+    }
+    /* Zoom-in continu sur la carte photo (à droite) — Ken Burns lent
+       pour donner de la vie à l'image fixe à côté de la vidéo. */
+    @keyframes ff-zoom-in {
+      0%   { transform: scale(1.02) translate3d(0, 0, 0); }
+      100% { transform: scale(1.18) translate3d(0, -2%, 0); }
+    }
+    img.ff-card__video--zoom {
+      animation: ff-zoom-in 14s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+      transform-origin: 50% 55%;
     }
     .ff-card::after {
       content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -786,10 +797,7 @@
     .ink-cursor.is-pressed {
       width: 28px; height: 28px;
     }
-    body.has-ink-cursor,
-    body.has-ink-cursor a,
-    body.has-ink-cursor button,
-    body.has-ink-cursor [role="button"] { cursor: none; }
+    /* Curseur natif visible partout — aucun masquage. */
     @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
       .ink-cursor { display: none !important; }
     }
@@ -1415,7 +1423,17 @@
     ────────────────────────────────────────────────────────── -->
     <section class="strip" data-strip>
       <div class="strip__sticky">
-        <img class="strip__video strip__video--motion" src="assets/images/02.jpg" alt="Arrivée à la villa, au bout du cul-de-sac" />
+        <video
+          class="strip__video strip__video--motion"
+          src="assets/videos/strip-entree.mp4"
+          poster="assets/images/02.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          aria-label="Arrivée à la villa, au bout du cul-de-sac"
+        ></video>
 
         <div class="strip__info">
           <h3 class="strip__title" data-strip-anim>
@@ -1910,11 +1928,21 @@
       <div class="films-fs__grid">
 
         <figure class="ff-card ff-card--landscape reveal">
-          <img class="ff-card__video" src="assets/images/03.jpg" alt="Vue arrière de la villa vers les champs" loading="lazy" />
+          <video
+            class="ff-card__video"
+            src="assets/videos/film-salon.mp4"
+            poster="assets/images/film-salon-photo.jpg"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            aria-label="Le salon — plan cinématique"
+          ></video>
         </figure>
 
         <figure class="ff-card reveal">
-          <img class="ff-card__video" src="assets/images/11.jpg" alt="Détail intérieur" loading="lazy" />
+          <img class="ff-card__video ff-card__video--zoom" src="assets/images/film-salon-photo.jpg" alt="Le salon ouvert sur le jardin" loading="lazy" />
         </figure>
 
       </div>
@@ -1978,11 +2006,11 @@
             <span class="chap-mark__lab">Galerie</span>
           </div>
           <span class="gallery__count">
-            <span data-gallery-count>35</span> vues
+            <span data-gallery-count>36</span> vues
           </span>
         </div>
         <h2 class="gallery__title">
-          Trente-cinq regards <em>sur la villa.</em>
+          Trente-six regards <em>sur la villa.</em>
         </h2>
         <p class="gallery__sub">Cliquez sur une image pour l'ouvrir en plein écran.</p>
       </header>
@@ -2015,10 +2043,7 @@
           <em>au bout d'un cul-de-sac.</em>
         </h2>
         <p class="location__para">
-          Aux confins de la forêt de Soignes, dans un environnement verdoyant
-          d'une rare tranquillité, la villa s'installe au bout d'un cul-de-sac
-          sans aucune circulation. Sur <strong>2.420&nbsp;m²</strong> de terrain,
-          face aux champs ouverts, à seulement quelques minutes de Bruxelles.
+          Aux confins de la forêt de Soignes, dans un environnement verdoyant d'une rare tranquillité, la villa s'installe au bout d'un cul-de-sac sans aucune circulation. Sur 2.420 m² de terrain, face aux champs ouverts, à seulement quelques minutes de Bruxelles.
         </p>
 
         <ul class="location__list">
@@ -2617,12 +2642,6 @@
       }
     })();
   </script>
-
-  <!-- Curseur personnalisé (point + bague qui suit) -->
-  <div class="cursor" data-cursor hidden aria-hidden="true">
-    <span class="cursor__ring"></span>
-    <span class="cursor__dot"></span>
-  </div>
 
 </body>
 </html>
