@@ -1268,6 +1268,75 @@
       .amenities__grid { grid-template-columns: 1fr; }
       .amenity { border-right: 0 !important; }
     }
+
+    /* ── Contact form ────────────────────────────────────────── */
+    .contact__form-wrap {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .contact__form-intro {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 1.75rem;
+    }
+    .contact__form { display: flex; flex-direction: column; gap: 1.4rem; }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+    @media (max-width: 640px) { .cf-row { grid-template-columns: 1fr; } }
+    .cf-field { display: flex; flex-direction: column; gap: 0.45rem; }
+    .cf-label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .cf-input {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--ink);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line-strong);
+      padding: 0.55rem 0;
+      outline: none;
+      transition: border-color var(--t-fast) var(--ease-out);
+      width: 100%;
+      resize: none;
+      -webkit-appearance: none;
+    }
+    .cf-input:focus { border-bottom-color: var(--moss); }
+    .cf-input::placeholder { color: var(--stone-3); }
+    .cf-textarea { min-height: 72px; }
+    .cf-submit {
+      width: 100%;
+      justify-content: center;
+      cursor: pointer;
+      font-family: var(--sans);
+      border: none;
+      margin-top: 0.5rem;
+    }
+    .cf-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+    .cf-success {
+      padding: 0.85rem 1.1rem;
+      background: #f4faf4;
+      border: 1px solid #b8ddb8;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: #2d6b2d;
+      line-height: 1.5;
+    }
+    .cf-error {
+      padding: 0.85rem 1.1rem;
+      background: #fff4f4;
+      border: 1px solid #f0b8b8;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: #a00;
+    }
   </style>
 </head>
 
@@ -2086,6 +2155,38 @@
                   <span class="contact__line-label">Bureau</span>
                   <span class="contact__line-value">+32 (0)2 808 03 64</span>
                 </a>
+
+            <div class="contact__form-wrap">
+              <p class="contact__form-intro">Ou envoyez-nous un message</p>
+              <form class="contact__form" id="contact-form" novalidate>
+                <div class="cf-row">
+                  <div class="cf-field">
+                    <label class="cf-label" for="cf-name">Nom complet *</label>
+                    <input class="cf-input" type="text" id="cf-name" name="name" placeholder="Jean Dupont" autocomplete="name" required>
+                  </div>
+                  <div class="cf-field">
+                    <label class="cf-label" for="cf-email">E-mail *</label>
+                    <input class="cf-input" type="email" id="cf-email" name="email" placeholder="jean@exemple.be" autocomplete="email" required>
+                  </div>
+                </div>
+                <div class="cf-field">
+                  <label class="cf-label" for="cf-phone">Téléphone</label>
+                  <input class="cf-input" type="tel" id="cf-phone" name="phone" placeholder="+32 (0)4xx xx xx xx" autocomplete="tel">
+                </div>
+                <div class="cf-field">
+                  <label class="cf-label" for="cf-message">Message</label>
+                  <textarea class="cf-input cf-textarea" id="cf-message" name="message" placeholder="Disponibilités, questions…"></textarea>
+                </div>
+                <button type="submit" class="contact__cta-pill cf-submit" id="cf-btn">
+                  <span id="cf-btn-text">Envoyer ma demande</span>
+                  <span class="contact__cta-arrow" aria-hidden="true">→</span>
+                </button>
+                <div class="cf-success" id="cf-success" style="display:none">
+                  ✓ Message envoyé — Sylvie Koch vous contactera dans les plus brefs délais.
+                </div>
+                <div class="cf-error" id="cf-error" style="display:none"></div>
+              </form>
+            </div>
               </li>
               <li>
                 <a href="tel:+32472869668" class="contact__line">
@@ -2688,9 +2789,59 @@
 
     track('page_view');
 
-    // Only the bottom contact CTA counts as an enquiry
-    var ctaPill = document.querySelector('.contact__cta-pill');
+    // Only the contact form counts as an enquiry
+    var ctaPill = document.querySelector('.contact__cta-pill:not(.cf-submit)');
     if (ctaPill) ctaPill.addEventListener('click', function() { track('demander_visite'); });
+
+    // Contact form submission
+    var form = document.getElementById('contact-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name  = document.getElementById('cf-name').value.trim();
+        var email = document.getElementById('cf-email').value.trim();
+        if (!name || !email) {
+          var errEl = document.getElementById('cf-error');
+          errEl.textContent = 'Veuillez renseigner votre nom et e-mail.';
+          errEl.style.display = 'block';
+          return;
+        }
+        var btn = document.getElementById('cf-btn');
+        var btnText = document.getElementById('cf-btn-text');
+        btn.disabled = true;
+        btnText.textContent = 'Envoi en cours…';
+        document.getElementById('cf-error').style.display = 'none';
+
+        fetch(SB_URL + '/rest/v1/leads', {
+          method: 'POST',
+          headers: {
+            'apikey': SB_KEY,
+            'Authorization': 'Bearer ' + SB_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            page_id:    PAGE_ID,
+            name:       name,
+            email:      email,
+            phone:      document.getElementById('cf-phone').value.trim(),
+            message:    document.getElementById('cf-message').value.trim(),
+            visitor_id: getVisitorId()
+          })
+        }).then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          track('form_submit');
+          form.style.display = 'none';
+          document.getElementById('cf-success').style.display = 'block';
+        }).catch(function() {
+          btn.disabled = false;
+          btnText.textContent = 'Envoyer ma demande';
+          var errEl = document.getElementById('cf-error');
+          errEl.textContent = 'Une erreur est survenue. Veuillez nous contacter directement par e-mail.';
+          errEl.style.display = 'block';
+        });
+      });
+    }
   })();
   </script>
 </body>
