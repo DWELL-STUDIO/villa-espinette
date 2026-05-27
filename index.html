@@ -1,0 +1,2628 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Villa Rhode-Saint-Genèse — Christie's International Real Estate</title>
+  <meta name="description" content="Villa contemporaine durable à Rhode-Saint-Genèse (Grande Espinette), au bout d'un cul-de-sac. ±450 m² habitables, 2 420 m² de terrain, 5 chambres, 3 salles de bains, PEB A, panneaux photovoltaïques, piscine. Réf. 12/0339." />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Bibliothèques scroll : GSAP + ScrollTrigger + Lenis (smooth scroll) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- Animations dynamiques + composant slider avant/après -->
+  <style>
+    /* ── Typographie Christie's : Gilroy (sans, body + display) + Playfair Display (italique éditorial) ── */
+    @font-face {
+      font-family: 'Gilroy'; font-style: normal; font-weight: 300; font-display: swap;
+      src: url('assets/fonts/gilroy/Gilroy-Light.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Gilroy'; font-style: normal; font-weight: 400; font-display: swap;
+      src: url('assets/fonts/gilroy/Gilroy-Regular.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Gilroy'; font-style: normal; font-weight: 500; font-display: swap;
+      src: url('assets/fonts/gilroy/Gilroy-Medium.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Gilroy'; font-style: normal; font-weight: 600; font-display: swap;
+      src: url('assets/fonts/gilroy/Gilroy-SemiBold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Gilroy'; font-style: normal; font-weight: 700; font-display: swap;
+      src: url('assets/fonts/gilroy/Gilroy-Bold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: normal; font-weight: 400; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-Regular.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: italic; font-weight: 400; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-Italic.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: normal; font-weight: 500; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-Medium.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: italic; font-weight: 500; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-MediumItalic.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: normal; font-weight: 600; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-SemiBold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: italic; font-weight: 600; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-SemiBoldItalic.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: normal; font-weight: 700; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-Bold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Playfair Display'; font-style: italic; font-weight: 700; font-display: swap;
+      src: url('assets/fonts/playfair/PlayfairDisplay-BoldItalic.ttf') format('truetype');
+    }
+
+    /* ── Charte Christie's International Real Estate — Brand Guidelines 2026 ──
+       Typographie :
+         • Display (grands titres éditoriaux) → Playfair Display (sérif)
+         • Sans (corps de texte, labels, eyebrows en majuscules) → Gilroy
+       Couleurs (Brand Guidelines p.8) :
+         • White #ffffff (fond principal — l'emphase est mise sur le blanc)
+         • 100% Black #000000
+         • Charcoal  PMS 432 C #384249
+         • Medium Gray  PMS C. Gray 9 C #76787b
+         • Light Gray   PMS C. Gray 6 C #a3aaad
+         • Gold (accent, parcimonieux) PMS 466 C #c9ac77
+         • Red  (accent, parcimonieux) PMS 485 C #ed1c24                       */
+    :root {
+      /* Typographie de marque */
+      --display:      'Playfair Display', Georgia, 'Times New Roman', serif;
+      --sans:         'Gilroy', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      --serif-italic: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+      /* Palette officielle (Brand Guidelines p.8) */
+      --paper:       #ffffff;
+      --paper-2:     #ffffff;
+      --canvas:      #f7f7f7;   /* gris très clair, transition douce sur le blanc */
+      --beige:       #ededed;   /* gris ultra-clair pour cartes neutres */
+      --stone:       #76787b;   /* Medium Gray brand */
+      --stone-2:     #384249;   /* Charcoal brand */
+      --stone-3:     #a3aaad;   /* Light Gray brand */
+      --ink:         #000000;   /* 100% Black brand */
+      --moss:        #c9ac77;   /* Gold brand */
+      --accent-red:  #ed1c24;   /* Red brand */
+      --line:        rgba(56, 66, 73, 0.10);
+      --line-strong: rgba(56, 66, 73, 0.20);
+      --paper-rgb:   255, 255, 255;
+      --ink-rgb:     0, 0, 0;
+    }
+
+    /* Corps : sans-serif Gilroy, poids régulier */
+    body { font-family: var(--sans); font-weight: 400; color: var(--ink); }
+
+    /* Tous les titres en Playfair Display (sérif éditoriale Christie's) */
+    .hero__title, .stmt__title, .editorial__title, .strip__title, .scrub__title,
+    .specs__title, .lectures__title, .spaces__title, .amenities__title,
+    .gallery__title, .location__title, .contact__title, .films-fs__title,
+    .cinemo__title, .space__name, .lecture-row__label, .amenity__title {
+      font-family: var(--display) !important;
+      font-weight: 500;
+      letter-spacing: -0.012em;
+    }
+    /* Le hero (très grand) prend un poids un peu plus léger pour la finesse Playfair */
+    .hero__title .hero__line:not(.hero__line--sub) { font-weight: 500; }
+    /* Les eyebrows (suréléments en MAJUSCULES) restent en Gilroy bold */
+    .amenities__eyebrow, .films-fs__eyebrow, .contact__eyebrow,
+    .cinemo__eyebrow, .lecture-row__eyebrow, .hero__line--sub,
+    .spec__lab, .gallery__count, .chap-mark__lab,
+    .space__num, .lecture-row__num, .nav__cta, .contact__cta-pill {
+      font-family: var(--sans) !important;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    /* Italiques éditoriaux → Playfair Display italique (élégance Christie's),
+       teinte gris charcoal pour le contraste subtil. */
+    em, i, .stmt__title em, .editorial__title em, .strip__title em, .scrub__title em,
+    .location__title em, .lectures__title em, .ff-slide__hero em,
+    .hero__title em, .specs__title em, .spaces__title em, .amenities__title em,
+    .gallery__title em, .contact__title em, .films-fs__title em, .cinemo__title em {
+      font-style: italic;
+      font-family: var(--serif-italic);
+      font-weight: 400;
+      color: var(--stone-2);
+    }
+
+    /* ── Logos officiels Christie's International Real Estate Belgium ──
+       Brand Guidelines : largeur minimale 120px. Ratio du lockup ≈ 2.43:1,
+       donc une hauteur de 50px ≈ 121px de large (conforme).               */
+    .nav__brand { gap: 0; }
+    .nav__brand-logo {
+      display: block;
+      width: auto;
+      height: 50px;
+      transition: opacity var(--t-fast) var(--ease-out);
+    }
+    .nav__brand-logo--white { display: none; }
+    /* Au-dessus du hero (vidéo sombre) : logo blanc. Après scroll (fond blanc) : logo noir. */
+    .nav.is-scrolled .nav__brand-logo--black { display: block; }
+    .nav.is-scrolled .nav__brand-logo--white { display: none; }
+    .nav:not(.is-scrolled) .nav__brand-logo--black { display: none; }
+    .nav:not(.is-scrolled) .nav__brand-logo--white { display: block; }
+    .foot__brand-logo {
+      display: block;
+      width: auto;
+      height: 72px;
+      opacity: 0.95;
+    }
+    @media (max-width: 540px) {
+      .nav__brand-logo { height: 38px; }
+      .foot__brand-logo { height: 52px; }
+    }
+
+    @keyframes erp-kb-in   { 0% { transform: scale(1.04) translate3d(0,0,0); } 100% { transform: scale(1.14) translate3d(-1.5%, -1%, 0); } }
+    @keyframes erp-kb-pan  { 0% { transform: scale(1.08) translate3d(0,0,0); } 100% { transform: scale(1.18) translate3d(2%, -1.5%, 0); } }
+    @keyframes erp-kb-zoom { 0% { transform: scale(1) translate3d(0,0,0); }    100% { transform: scale(1.10) translate3d(0, -2%, 0); } }
+
+    /* Ken Burns — uniquement sur les balises <img>. Les <video> jouent leur propre motion. */
+    img.hero__video    { animation: erp-kb-in   18s ease-in-out infinite alternate; transform-origin: 50% 50%; }
+    img.strip__video   { animation: erp-kb-pan  22s ease-in-out infinite alternate; transform-origin: 60% 40%; }
+    img.scrub__video   { animation: erp-kb-zoom 26s ease-in-out infinite alternate; transform-origin: 50% 60%; }
+
+    /* Vidéos en hero/scrub — assurer object-fit + plein cadre, désactiver toute interaction */
+    video.hero__video, video.scrub__video, video.strip__video {
+      width: 100%; height: 100%; object-fit: cover; pointer-events: none;
+    }
+    /* Hero — légère désaturation (rendu plus mat, dans l'esprit Christie's) */
+    video.hero__video--vivid {
+      filter: saturate(0.88) contrast(1.06) brightness(1.02);
+    }
+    /* Voile hero légèrement allégé pour laisser passer la couleur sous le texte */
+    .hero__veil {
+      background:
+        linear-gradient(180deg,
+          rgba(56, 66, 73, 0.22) 0%,
+          rgba(56, 66, 73, 0.06) 35%,
+          rgba(56, 66, 73, 0.55) 100%) !important;
+    }
+    /* Masque tous les "points de repère" : chap-marks dans les en-têtes
+       (« 01 · Architecture », « 02b · Lectures », etc.) */
+    .chap-mark { display: none !important; }
+
+    /* ── ARCHITECTURE compacte (édito plus court, titre plus modeste) ── */
+    .editorial { padding: clamp(2.5rem, 5vh, 4rem) var(--gutter) !important; }
+    .editorial__intro {
+      margin-bottom: clamp(1.5rem, 3vh, 2.5rem) !important;
+    }
+    .editorial__title {
+      font-size: clamp(1.8rem, 4vw, 3.4rem) !important;
+      max-width: 22ch !important;
+    }
+    .editorial__para {
+      font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+      max-width: 56ch;
+    }
+    .editorial__quote {
+      margin-top: 1.25rem !important;
+      font-size: clamp(0.95rem, 1.1vw, 1.1rem) !important;
+    }
+    .editorial__figure { max-height: 60vh; }
+    .editorial__figure img { aspect-ratio: 4/3; object-fit: cover; }
+
+    /* ── FICHE TECHNIQUE compacte (sous le hero, avant le strip) ── */
+    .specs { padding: clamp(2rem, 4vh, 3.5rem) var(--gutter) !important; }
+    .specs__head {
+      padding-bottom: 0.85rem !important;
+      margin-bottom: clamp(1.5rem, 3vh, 2.25rem) !important;
+    }
+    .specs__title { font-size: clamp(1.25rem, 2.4vw, 1.9rem) !important; }
+    .specs .spec {
+      min-height: clamp(90px, 12vh, 130px) !important;
+      padding-top: clamp(0.9rem, 1.6vw, 1.4rem) !important;
+      padding-bottom: clamp(0.9rem, 1.6vw, 1.4rem) !important;
+      gap: 0.55rem !important;
+    }
+    .specs .spec__num { font-size: clamp(1.8rem, 4.2vw, 3.6rem) !important; }
+    .specs .spec__lab { font-size: 0.62rem !important; }
+    .specs__footnote {
+      margin-top: clamp(1rem, 2.5vh, 1.75rem) !important;
+      padding-top: 0.9rem !important;
+    }
+    .specs__footnote li { font-size: 0.78rem !important; }
+
+    /* ── STRIP "Arrivée" — vidéo en cadre, à côté du texte, fond clair (papier) ── */
+    .strip {
+      height: auto !important;
+      background: var(--paper) !important;
+      color: var(--ink) !important;
+    }
+    .strip__sticky {
+      position: relative !important;
+      height: auto !important;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      align-items: stretch; /* la colonne texte épouse la hauteur de la vidéo */
+      gap: clamp(2rem, 5vw, 5rem);
+      padding: clamp(3rem, 7vh, 5rem) var(--gutter);
+    }
+    /* Voile dégradé inutile dans ce nouveau layout */
+    .strip__sticky::after { display: none; }
+
+    /* Vidéo : petit cadre à droite, secondaire au texte */
+    .strip .strip__video {
+      position: relative !important;
+      inset: auto !important;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      max-height: 50vh;
+      object-fit: cover;
+      border-radius: 10px;
+      transform: none !important;
+      box-shadow: 0 18px 50px rgba(56, 66, 73, 0.15);
+    }
+    /* Texte : colonne de gauche, hauteur = vidéo, contenu centré verticalement */
+    .strip .strip__info {
+      position: static !important;
+      max-width: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+    .strip .strip__title {
+      color: var(--ink);
+      max-width: 16ch;
+      font-size: clamp(2.4rem, 5.4vw, 5rem); /* un peu plus grand pour respirer dans la hauteur */
+    }
+    .strip .strip__title em { color: rgba(56, 66, 73, 0.55); }
+    .strip .strip__desc  { color: rgba(56, 66, 73, 0.68); max-width: 38ch; }
+
+    @media (max-width: 880px) {
+      .strip__sticky {
+        grid-template-columns: 1fr !important;
+      }
+      .strip .strip__video { order: -1; } /* vidéo au-dessus du texte */
+    }
+
+    /* ── NAV — pilule LIQUID GLASS qui suit le hover (style villa rhode v2) ──
+       Une seule pilule flottante (.nav__pill) qui se déplace en transform
+       d'un lien à l'autre selon le hover ; si pas de hover, elle marque la
+       section active. 3 couches : blur+distortion fractal, voile chaud,
+       highlight insets. */
+    .nav .nav__links { position: relative; gap: 0; padding: 0; background: none; box-shadow: none; }
+    .nav .nav__links::before { content: none; }
+
+    .nav .nav__links a {
+      position: relative;
+      padding: 0.55rem 1rem;
+      opacity: 1;
+      transition: color var(--t-fast) var(--ease-out, ease);
+    }
+    /* Désactive le soulignement animé d'origine — la pilule fait le job */
+    .nav .nav__links a::after { content: none !important; }
+    /* Lien actif (sous la pilule) — texte assombri pour mieux ressortir */
+    .nav.is-scrolled .nav__links a.is-pill-target { color: var(--ink); font-weight: 600; }
+    .nav .nav__links a.is-pill-target { color: var(--paper); }
+
+    /* La pilule glass — positionnée en JS via transform translate + width/height */
+    .nav__pill {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      border-radius: 9999px;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 0;
+      box-shadow: 0 4px 16px rgba(56, 66, 73, 0.12);
+      transition:
+        transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+        width    360ms cubic-bezier(0.22, 1, 0.36, 1),
+        height   360ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity  220ms ease;
+      will-change: transform, width, height, opacity;
+    }
+    .nav__pill.is-visible { opacity: 1; }
+
+    /* Les 3 couches de la pilule, empilées dans la même rondeur */
+    .nav__pill-blur,
+    .nav__pill-tint,
+    .nav__pill-highlight {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+    .nav__pill-blur {
+      backdrop-filter: blur(8px) saturate(150%);
+      -webkit-backdrop-filter: blur(8px) saturate(150%);
+      filter: url(#glass-distortion);
+      isolation: isolate;
+    }
+    .nav__pill-tint {
+      background: rgba(255, 255, 255, 0.45); /* voile blanc neutre Christie's */
+    }
+    .nav__pill-highlight {
+      box-shadow:
+        inset 1.5px 1.5px 1px 0 rgba(255, 255, 255, 0.60),
+        inset -1px -1px 1px 1px rgba(255, 255, 255, 0.35);
+    }
+
+    /* Les liens passent au-dessus de la pilule */
+    .nav .nav__links a { z-index: 1; }
+    /* Mobile : .nav__links caché par style.css ≤ 720px, pilule disparaît avec */
+
+    /* Section STMT — phrase manifeste centrée */
+    .stmt__inner--center { text-align: center; }
+    .stmt__title--center {
+      max-width: none;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Hero — titre "Percke" calé à gauche, légèrement descendu, typographie display, blanc */
+    .hero__content--center {
+      text-align: left;
+      justify-self: start;
+      max-width: none;
+      width: auto;
+      margin: 0;
+      transform: translateY(clamp(6rem, 22vh, 14rem)); /* descend le titre */
+    }
+    .hero__title--white {
+      color: var(--paper) !important;
+      margin: 0 !important;
+      text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35); /* lisibilité sur la vidéo */
+    }
+    /* Surtitre — typo plus discrète au-dessus du nom de la villa */
+    .hero__line--sub {
+      display: block;
+      font-size: clamp(0.78rem, 1.1vw, 1rem);
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: clamp(0.6rem, 1.2vh, 1.2rem);
+      line-height: 1;
+    }
+    /* Léger zoom sur les vidéos au survol pour rester vivant */
+    .hero__video--motion,
+    .scrub__video--motion { transition: transform 9s ease-out; transform: scale(1); will-change: transform; }
+    .hero:hover .hero__video--motion,
+    .scrub:hover .scrub__video--motion { transform: scale(1.04); }
+
+    .stmt__attr        { margin-top: 1.2rem; font-size: 0.78rem; letter-spacing: 0.08em; opacity: 0.55; font-style: italic; }
+
+    /* Cards Espaces — élévation au survol */
+    .space             { transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .space:hover       { transform: translateY(-4px); }
+    .space__media img  { transition: transform 1200ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .space:hover .space__media img { transform: scale(1.04); }
+
+    /* Galerie — micro-zoom au survol */
+    .gallery__item img { transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1), filter 400ms ease; }
+    .gallery__item:hover img { transform: scale(1.05); filter: brightness(1.05); }
+
+    /* Galerie en MASONRY (CSS columns) — chaque image garde son ratio natif,
+       les items s'empilent verticalement par colonnes, aucun espace vide. */
+    .gallery__grid {
+      display: block !important;            /* annule le grid d'origine */
+      column-count: 4;
+      column-gap: clamp(0.5rem, 0.9vw, 1rem);
+      grid-template-columns: none !important;
+      grid-auto-rows: auto !important;
+    }
+    .gallery__item {
+      display: block !important;
+      width: 100%;
+      margin: 0 0 clamp(0.5rem, 0.9vw, 1rem);
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      page-break-inside: avoid;
+      grid-column: auto !important;          /* neutralise les spans 12-cols */
+      grid-row: auto !important;
+    }
+    .gallery__item img {
+      width: 100%;
+      height: auto !important;               /* hauteur naturelle = pas de crop */
+      object-fit: initial !important;
+      display: block;
+    }
+    @media (max-width: 1100px) { .gallery__grid { column-count: 3; } }
+    @media (max-width: 720px)  { .gallery__grid { column-count: 2; } }
+    @media (max-width: 480px)  { .gallery__grid { column-count: 1; } }
+
+    /* ── Section FILMS — 2 vidéos en grille large sur fond clair, autoplay-loop muet ── */
+    .films-fs {
+      background: var(--canvas);      /* fond clair neutre (Christie's : gris très clair) */
+      color: var(--ink);
+      padding: clamp(7rem, 14vh, 12rem) clamp(0.5rem, 1.2vw, 1.4rem);
+    }
+    .films-fs__head { max-width: 70ch; margin: 0 auto clamp(4rem, 8vh, 6rem); text-align: center; }
+    .films-fs__eyebrow {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+      letter-spacing: 0.32em; text-transform: uppercase; font-weight: 500;
+      color: rgba(56, 66, 73, 0.78);
+      margin-bottom: 0;
+    }
+    .films-fs__title {
+      font-family: var(--serif-italic);
+      font-weight: 300; font-size: clamp(2.2rem, 5vw, 4.2rem);
+      letter-spacing: -0.02em; line-height: 1.05;
+      margin: 0 0 0.8rem; color: var(--ink);
+    }
+    .films-fs__title em { font-style: italic; color: rgba(56, 66, 73, 0.55); }
+    .films-fs__sub {
+      color: rgba(56, 66, 73, 0.62);
+      font-size: 1rem; line-height: 1.6;
+      margin: 0 auto; max-width: 60ch;
+    }
+    .films-fs__grid {
+      max-width: none;                /* full-bleed presque jusqu'aux bords */
+      margin: 0 auto;
+      display: grid; gap: clamp(0.8rem, 1.4vw, 1.4rem);
+      /* 2fr / 1fr : avec aspect-ratio 16/10 (paysage) et 4/5 (portrait),
+         ce ratio fait correspondre exactement la hauteur des deux cartes. */
+      grid-template-columns: 2fr 1fr;
+      align-items: start;
+    }
+    @media (max-width: 880px) {
+      .films-fs__grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+    .ff-card {
+      position: relative; overflow: hidden; aspect-ratio: 4 / 5;
+      border-radius: 10px; background: #000000; isolation: isolate;
+      box-shadow: 0 22px 60px rgba(56, 66, 73, 0.22);  /* ombre adaptée au fond clair */
+      transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ff-card:hover { transform: translateY(-4px); box-shadow: 0 32px 80px rgba(56, 66, 73, 0.30); }
+    .ff-card--landscape { aspect-ratio: 16 / 10; }
+
+    /* Section FILM (04) — neutralise le scrub : hauteur normale 100vh + vidéo en
+       autoplay-loop dans son sticky (qui devient inutile à cette hauteur). */
+    .scrub.scrub--autoplay {
+      height: 100vh;
+      height: 100svh;
+    }
+    .scrub.scrub--autoplay .scrub__sticky {
+      position: relative;
+      top: auto;
+      height: 100%;
+    }
+    .ff-card__video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block; pointer-events: none;
+    }
+    .ff-card::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, rgba(20,17,11,0) 45%, rgba(20,17,11,0.78) 100%);
+    }
+    .ff-card__cap {
+      position: absolute; bottom: clamp(1rem, 2vh, 1.6rem); left: clamp(1rem, 2vw, 1.6rem); right: clamp(1rem, 2vw, 1.6rem);
+      z-index: 2; color: #ffffff;
+    }
+    .ff-card__num {
+      display: block;
+      font-family: var(--sans);
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 0.55rem;
+    }
+    .ff-card__title {
+      font-family: var(--serif-italic);
+      font-weight: 300; font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+      letter-spacing: -0.01em; line-height: 1.15;
+      margin: 0 0 0.35rem;
+    }
+    .ff-card__desc {
+      font-family: var(--sans);
+      font-size: 0.82rem; line-height: 1.5;
+      color: rgba(255, 255, 255, 0.72);
+      margin: 0;
+    }
+
+    /* ── Section CINÉMA — vidéo full-bleed, texte révélé en masque ──
+       Inspirée des "splash films" éditoriaux : un seul plan, une seule phrase.
+       Le titre est cassé en lignes, chaque ligne montée derrière un masque
+       (overflow:hidden) ; les mots remontent en stagger quand la section
+       entre en vue. Le voile combine un radial (centre lumineux) et un
+       vertical (top/bottom plus dense) pour la lisibilité du texte clair. */
+    .cinemo {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      min-height: 620px;
+      overflow: hidden;
+      isolation: isolate;
+      color: #ffffff;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cinemo__media {
+      position: absolute; inset: 0; z-index: 0;
+      overflow: hidden;
+    }
+    .cinemo__svgdefs {
+      position: absolute; width: 0; height: 0; pointer-events: none;
+    }
+    .cinemo__video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transform: translateZ(0) scale(1.04);
+      /* Image : on applique le Ken Burns en CSS. Vidéo : motion native. */
+      filter:
+        saturate(1.04)
+        contrast(1.08)
+        brightness(1.01);
+      pointer-events: none;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+    }
+    img.cinemo__video {
+      animation: cinemoKB 18s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+      filter: url(#cinemo-sharpen) saturate(1.02) contrast(1.08) brightness(1.01);
+    }
+    @keyframes cinemoKB {
+      0%   { transform: translateZ(0) scale(1.08) translate3d(0, 0, 0); }
+      100% { transform: translateZ(0) scale(1.48) translate3d(3%, -2.2%, 0); }
+    }
+    .cinemo__inner {
+      position: relative; z-index: 3;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      max-width: 1100px;
+      text-align: center;
+      /* Sans voile derrière le texte : on lui donne sa propre ombre douce
+         pour qu'il reste lisible sur n'importe quelle teinte de la vidéo. */
+      text-shadow: 0 1px 2px rgba(14,12,8,0.45), 0 6px 24px rgba(14,12,8,0.35);
+    }
+    .cinemo__eyebrow {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: clamp(0.72rem, 0.92vw, 0.85rem);
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.82);
+      margin: 0 0 clamp(1.6rem, 3.2vh, 2.4rem);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 1.2s ease 0.12s, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
+    }
+    .cinemo__eyebrow::before,
+    .cinemo__eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: clamp(28px, 4vw, 56px);
+      height: 1px;
+      background: rgba(255, 255, 255, 0.55);
+      vertical-align: middle;
+      margin: 0 0.85rem;
+      transform-origin: center;
+    }
+    .cinemo__title {
+      font-family: var(--serif-italic);
+      font-weight: 300;
+      font-size: clamp(2.6rem, 8.2vw, 7.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+      margin: 0 0 clamp(1.6rem, 3.4vh, 2.6rem);
+      color: #ffffff;
+    }
+    .cinemo__title em {
+      font-style: italic;
+      font-family: var(--serif-italic);
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .cinemo__mask {
+      display: block;
+      overflow: hidden;
+      line-height: 1.1;
+      padding: 0.04em 0.02em;
+    }
+    .cinemo__word {
+      display: inline-block;
+      transform: translateY(110%);
+      transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+      will-change: transform;
+    }
+    .cinemo__lede {
+      font-family: var(--sans);
+      font-size: clamp(0.95rem, 1.18vw, 1.05rem);
+      line-height: 1.65;
+      max-width: 50ch;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.74);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 1.4s ease 0.95s, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.95s;
+    }
+    .cinemo__hairline {
+      display: block;
+      width: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.6);
+      margin: clamp(1.6rem, 3vh, 2.4rem) auto 0;
+      transition: width 1.6s cubic-bezier(0.19, 1, 0.22, 1) 1.1s;
+    }
+    .cinemo.is-active .cinemo__eyebrow,
+    .cinemo.is-active .cinemo__lede {
+      opacity: 1; transform: translateY(0);
+    }
+    .cinemo.is-active .cinemo__mask:nth-of-type(1) .cinemo__word { transition-delay: 0.22s; transform: translateY(0); }
+    .cinemo.is-active .cinemo__mask:nth-of-type(2) .cinemo__word { transition-delay: 0.38s; transform: translateY(0); }
+    .cinemo.is-active .cinemo__mask:nth-of-type(3) .cinemo__word { transition-delay: 0.54s; transform: translateY(0); }
+    .cinemo.is-active .cinemo__hairline { width: clamp(48px, 6vw, 96px); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cinemo__video { animation: none; transform: none; }
+      .cinemo__word { transform: none; transition: none; }
+      .cinemo__eyebrow, .cinemo__lede { opacity: 1; transform: none; transition: none; }
+      .cinemo__hairline { width: clamp(48px, 6vw, 96px); transition: none; }
+    }
+
+
+    /* ───────────────────────────────────────────────────────────
+       MASK-REVEAL UNIFIÉ — titres de section + hero
+       ─────────────────────────────────────────────────────────
+       Tous les éléments [data-anim-title] voient leur contenu
+       découpé en mots ; chaque mot devient un masque (overflow:hidden)
+       avec un span enfant qui remonte de translateY(115%) à 0.
+       La cascade est pilotée par --i (index du mot) en CSS, donc
+       aucune dépendance à GSAP. Un IntersectionObserver ajoute
+       .is-in quand le titre entre dans le viewport. */
+    [data-anim-title] { visibility: hidden; }
+    [data-anim-title].is-prepared { visibility: visible; }
+    .aw {
+      display: inline-block;
+      overflow: hidden;
+      line-height: inherit;
+      /* Padding plus généreux en bas pour les descendantes (g, p, q, y)
+         de Playfair Display — sinon coupées par overflow: hidden. */
+      padding: 0.10em 0.04em 0.26em;
+      vertical-align: bottom;
+    }
+    .aw-i {
+      display: inline-block;
+      transform: translateY(115%);
+      transition: transform 1.05s cubic-bezier(0.19, 1, 0.22, 1);
+      transition-delay: calc(var(--i, 0) * 0.07s);
+      will-change: transform;
+    }
+    [data-anim-title].is-in .aw-i { transform: translateY(0); }
+    /* Hero : cascade un peu plus lente + plus poétique au load */
+    .hero__title[data-anim-title] .aw-i {
+      transition-duration: 1.4s;
+      transition-delay: calc(0.2s + var(--i, 0) * 0.12s);
+    }
+
+    /* Eyebrows : fine ligne dessinée + lettre par lettre quand entre en vue.
+       On cible toute classe finissant en __eyebrow + .lecture-row__eyebrow,
+       et on ajoute data-anim-eyebrow par JS pour activer l'effet. */
+    [data-anim-eyebrow] {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    [data-anim-eyebrow]::before {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.55;
+      transition: width 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.15s;
+    }
+    [data-anim-eyebrow].is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-anim-eyebrow].is-in::before {
+      width: clamp(22px, 3vw, 42px);
+    }
+    /* L'eyebrow de cinemo a déjà ses propres hairlines avant/après — on ne
+       touche pas à son rendu. */
+    .cinemo__eyebrow[data-anim-eyebrow] { display: inline-block; gap: 0; }
+    .cinemo__eyebrow[data-anim-eyebrow]::before { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      [data-anim-title] { visibility: visible !important; }
+      .aw-i { transform: none !important; transition: none !important; }
+      [data-anim-eyebrow] { opacity: 1; transform: none; transition: none; }
+      [data-anim-eyebrow]::before { width: clamp(22px, 3vw, 42px); transition: none; }
+    }
+
+
+    /* ───────────────────────────────────────────────────────────
+       CURSEUR INK-DOT — petit point qui suit la souris en lerp,
+       grandit en cercle vide au-dessus des éléments interactifs.
+       Activé uniquement quand .has-ink-cursor est sur <body>
+       (ajouté en JS si hover:hover + pointer:fine + non-reduced). */
+    .ink-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--ink, #000000);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate3d(-100px, -100px, 0) translate(-50%, -50%) scale(1);
+      transition:
+        width 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+        height 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+        background 0.35s ease,
+        border-color 0.35s ease,
+        opacity 0.35s ease,
+        mix-blend-mode 0.35s ease;
+      mix-blend-mode: difference;
+      opacity: 0;
+    }
+    .ink-cursor.is-ready { opacity: 0.85; }
+    .ink-cursor.is-hover {
+      width: 44px; height: 44px;
+      background: transparent;
+      border: 1px solid #ffffff;
+    }
+    .ink-cursor.is-pressed {
+      width: 28px; height: 28px;
+    }
+    body.has-ink-cursor,
+    body.has-ink-cursor a,
+    body.has-ink-cursor button,
+    body.has-ink-cursor [role="button"] { cursor: none; }
+    @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+      .ink-cursor { display: none !important; }
+    }
+
+
+    /* ── Section LECTURES (zigzag éditorial, hover/tap toggle) ───── */
+    .lectures        { padding: clamp(4rem, 8vh, 8rem) clamp(1.25rem, 4vw, 4rem); background: #faf7f0; }
+    .lectures__head  { text-align: center; max-width: 64ch; margin: 0 auto clamp(3rem, 6vh, 5rem); }
+    .lectures__title { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 4.5vw, 3.6rem); letter-spacing: -0.02em; line-height: 1.05; margin: 0.6rem 0 1rem; }
+    .lectures__title em { font-style: italic; color: rgba(56, 66, 73, 0.55); }
+    .lectures__sub   { color: rgba(56, 66, 73, 0.6); font-size: 0.92rem; line-height: 1.55; max-width: 56ch; margin: 0 auto; }
+    .lectures__rows  {
+      display: flex; flex-direction: column;
+      gap: clamp(3rem, 7vh, 6rem);
+      max-width: 1480px; margin: 0 auto;
+    }
+
+    .lecture-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 5rem);
+    }
+    .lecture-row--img-left  .lecture-pair       { grid-column: 1; grid-row: 1; }
+    .lecture-row--img-left  .lecture-row__text  { grid-column: 2; grid-row: 1; }
+    .lecture-row--img-right .lecture-pair       { grid-column: 2; grid-row: 1; }
+    .lecture-row--img-right .lecture-row__text  { grid-column: 1; grid-row: 1; }
+
+    .lecture-row__text { max-width: 44ch; }
+    .lecture-row__eyebrow {
+      display: inline-block; font-size: 0.7rem; letter-spacing: 0.24em;
+      text-transform: uppercase; color: rgba(56, 66, 73, 0.55);
+      margin-bottom: 1.1rem;
+    }
+    .lecture-row__title {
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(1.8rem, 3.6vw, 3rem);
+      line-height: 1.05; letter-spacing: -0.025em;
+      margin: 0 0 1rem; color: var(--ink);
+    }
+    .lecture-row__title em { font-style: italic; font-weight: 400; color: rgba(56, 66, 73, 0.55); }
+    .lecture-row__desc {
+      font-size: clamp(0.95rem, 1.05vw, 1.05rem);
+      line-height: 1.6; color: rgba(56, 66, 73, 0.7);
+    }
+    /* Composition éditoriale magazine :
+       en-tête (numéro italique + filet horizontal qui s'étend),
+       label principal,
+       indicateurs animés synchro sur le crossfade. */
+    .lecture-row__text {
+      display: flex; flex-direction: column;
+      align-items: center;            /* centre tous les blocs dans la colonne */
+      text-align: center;
+      gap: 0;
+      margin-left: auto; margin-right: auto;
+    }
+    .lecture-row__text .lecture-row__head { justify-content: center; }
+    .lecture-row__text .lecture-row__rule { display: none; } /* filet horizontal incohérent en centré */
+    .lecture-row__text .lecture-states { align-items: center; }
+    .lecture-row__text .lecture-state { justify-content: center; }
+    .lecture-row__head {
+      display: flex; align-items: baseline;
+      gap: 1.25rem;
+      margin: 0 0 0.6rem;
+    }
+    .lecture-row__num {
+      font-family: var(--display);
+      font-weight: 200;
+      font-style: italic;
+      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: rgba(56, 66, 73, 0.85);
+      font-feature-settings: "tnum";
+    }
+    .lecture-row__rule {
+      flex: 1; height: 1px;
+      background: rgba(56, 66, 73, 0.25);
+      align-self: center;
+      transform: translateY(-0.15em);
+      max-width: 120px;
+    }
+    .lecture-row__label {
+      font-family: var(--display); font-weight: 500;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.02; letter-spacing: -0.025em;
+      margin: 0 0 1.6rem; color: var(--ink);
+    }
+
+    /* Liste des deux états avec dot animée synchro sur le crossfade image */
+    .lecture-states {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column;
+      gap: 0.55rem;
+    }
+    .lecture-state {
+      display: flex; align-items: center;
+      gap: 0.85rem;
+      font-family: var(--display);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    /* Indicateur : filet horizontal court qui "remplit" quand l'état est actif
+       (et se vide quand il s'éteint). Beaucoup plus éditorial qu'une pastille. */
+    .lecture-state__dot {
+      position: relative;
+      width: 28px; height: 1px;
+      background: rgba(56, 66, 73, 0.18);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .lecture-state__dot::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--ink);
+      transform-origin: left center;
+      transform: scaleX(0);
+    }
+    .lecture-state--a .lecture-state__dot::after {
+      animation: lp-line-a var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset);
+    }
+    .lecture-state--b .lecture-state__dot::after {
+      animation: lp-line-b var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset);
+    }
+    @keyframes lp-line-a {
+      0%, 22%  { transform: scaleX(1); }
+      40%, 60% { transform: scaleX(0); }
+      78%, 100%{ transform: scaleX(1); }
+    }
+    @keyframes lp-line-b {
+      0%, 22%  { transform: scaleX(0); }
+      40%, 60% { transform: scaleX(1); }
+      78%, 100%{ transform: scaleX(0); }
+    }
+    /* Le nom du state s'estompe quand son état n'est pas actif */
+    .lecture-state__name { transition: color 400ms ease, opacity 400ms ease; }
+    .lecture-state--a .lecture-state__name {
+      animation: lp-name-a var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset);
+    }
+    .lecture-state--b .lecture-state__name {
+      color: rgba(56, 66, 73, 0.4);
+      animation: lp-name-b var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset);
+    }
+    @keyframes lp-name-a {
+      0%, 22%  { color: rgba(56, 66, 73, 0.95); }
+      40%, 60% { color: rgba(56, 66, 73, 0.40); }
+      78%, 100%{ color: rgba(56, 66, 73, 0.95); }
+    }
+    @keyframes lp-name-b {
+      0%, 22%  { color: rgba(56, 66, 73, 0.40); }
+      40%, 60% { color: rgba(56, 66, 73, 0.95); }
+      78%, 100%{ color: rgba(56, 66, 73, 0.40); }
+    }
+
+    /* ── La paire image : auto-loop avec crossfade (ping-pong A↔B) ── */
+    .lecture-pair {
+      --lp-cycle: 14s;
+      --lp-offset: 0s;
+      --lp-ease: cubic-bezier(0.45, 0, 0.55, 1); /* sinusoïdale douce */
+      position: relative; aspect-ratio: 16/10; overflow: hidden;
+      border-radius: 10px; background: #000000;
+      box-shadow: 0 22px 60px rgba(56, 66, 73, 0.20);
+      isolation: isolate;
+      transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lecture-pair:hover { transform: translateY(-4px); box-shadow: 0 28px 70px rgba(56, 66, 73, 0.26); }
+    .lecture-pair__img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      will-change: opacity;
+    }
+    /* Boucle infinie — crossfade + zoom doux + léger blur en transition.
+       L'image visible respire (zoom 1.0 → 1.04 puis recule), pendant que
+       l'autre arrive en zoom contraire et perd son blur. Effet cinéma. */
+    .lecture-pair__img--a {
+      animation: lp-cinema-a var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset);
+      transform-origin: 50% 50%;
+    }
+    .lecture-pair__img--b {
+      opacity: 0;
+      animation: lp-cinema-b var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset);
+      transform-origin: 50% 50%;
+    }
+    @keyframes lp-cinema-a {
+      0%      { opacity: 1; transform: scale(1.00); filter: blur(0); }
+      22%     { opacity: 1; transform: scale(1.04); filter: blur(0); }
+      33%     { opacity: 0; transform: scale(1.06); filter: blur(2px); }
+      40%, 60%{ opacity: 0; transform: scale(1.06); filter: blur(2px); }
+      67%     { opacity: 0; transform: scale(1.04); filter: blur(2px); }
+      78%     { opacity: 1; transform: scale(1.02); filter: blur(0); }
+      100%    { opacity: 1; transform: scale(1.00); filter: blur(0); }
+    }
+    @keyframes lp-cinema-b {
+      0%, 22% { opacity: 0; transform: scale(1.06); filter: blur(2px); }
+      33%     { opacity: 1; transform: scale(1.02); filter: blur(0); }
+      40%     { opacity: 1; transform: scale(1.00); filter: blur(0); }
+      60%     { opacity: 1; transform: scale(1.04); filter: blur(0); }
+      67%     { opacity: 0; transform: scale(1.06); filter: blur(2px); }
+      78%, 100%{ opacity: 0; transform: scale(1.06); filter: blur(2px); }
+    }
+    /* Chips : on garde le fade A/B aligné sur le bascule d'opacité de chaque image. */
+    @keyframes lp-fade-a {
+      0%, 22%  { opacity: 1; }
+      40%, 60% { opacity: 0; }
+      78%, 100%{ opacity: 1; }
+    }
+    @keyframes lp-fade-b {
+      0%, 22%  { opacity: 0; }
+      40%, 60% { opacity: 1; }
+      78%, 100%{ opacity: 0; }
+    }
+
+    /* Chips : indiquent l'état visible, synchronisés sur le crossfade. */
+    .lecture-pair__chip {
+      position: absolute; top: 1.2rem; left: 1.2rem; z-index: 4; pointer-events: none;
+      font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 500;
+      background: rgba(56, 66, 73, 0.78); color: white;
+      padding: 7px 13px; border-radius: 999px;
+      backdrop-filter: blur(10px);
+      will-change: opacity;
+    }
+    .lecture-pair__chip--a { animation: lp-fade-a var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset); }
+    .lecture-pair__chip--b { opacity: 0; animation: lp-fade-b var(--lp-cycle) var(--lp-ease) infinite var(--lp-offset); }
+
+    /* Couleur du chip "B" selon le thème */
+    .lecture-pair--theme-night    .lecture-pair__chip--b { background: rgba(201, 172, 119, 0.94); color: #000000; } /* Gold brand */
+    .lecture-pair--theme-furnish  .lecture-pair__chip--b { background: rgba(56, 66, 73, 0.94); color: #ffffff; }  /* Charcoal brand */
+
+    /* ── Bouton de bascule manuel A↔B ─────────────────────────
+       Au premier clic : l'auto-cycle de la paire est désactivé et le bouton
+       devient maître. Chaque clic suivant flippe entre les deux états avec
+       un crossfade doux (CSS transition à la place de l'animation infinie). */
+    .lecture-row__toggle {
+      display: inline-flex; align-items: center; gap: 0.65rem;
+      align-self: center; /* centre le bouton dans la colonne flex */
+      width: auto;
+      margin-top: 1.6rem;
+      padding: 0.75rem 1.2rem 0.75rem 1rem;
+      background: rgba(56, 66, 73, 0.92);
+      border: 1px solid rgba(56, 66, 73, 0.92);
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(56, 66, 73, 0.18);
+      transition: background 220ms ease, border-color 220ms ease, color 220ms ease,
+                  transform 220ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms ease;
+      -webkit-appearance: none; appearance: none;
+    }
+    .lecture-row__toggle:hover {
+      background: #000000;
+      border-color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(56, 66, 73, 0.28);
+    }
+    .lecture-row__toggle:active { transform: translateY(0); }
+    .lecture-row__toggle:focus-visible {
+      outline: 2px solid rgba(56, 66, 73, 0.55); outline-offset: 3px;
+    }
+    .lecture-row__toggle-icon {
+      display: inline-block;
+      font-size: 0.95rem; line-height: 1;
+      transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lecture-row__toggle.is-flipped .lecture-row__toggle-icon { transform: rotate(180deg); }
+    .lecture-row__toggle-label { line-height: 1; }
+
+    /* État manuel — désactive les animations infinies et passe en transition pure */
+    .lecture-row.is-manual .lecture-pair__img,
+    .lecture-row.is-manual .lecture-pair__chip {
+      animation: none !important;
+    }
+    .lecture-row.is-manual .lecture-pair__img {
+      transition: opacity 600ms ease, transform 900ms cubic-bezier(0.16, 1, 0.3, 1), filter 600ms ease;
+    }
+    .lecture-row.is-manual .lecture-pair__chip {
+      transition: opacity 360ms ease;
+    }
+    .lecture-row.is-manual .lecture-pair__img--a { opacity: 1; transform: scale(1); filter: blur(0); }
+    .lecture-row.is-manual .lecture-pair__img--b { opacity: 0; transform: scale(1.04); filter: blur(0); }
+    .lecture-row.is-manual .lecture-pair__chip--a { opacity: 1; }
+    .lecture-row.is-manual .lecture-pair__chip--b { opacity: 0; }
+    .lecture-row.is-manual.is-state-b .lecture-pair__img--a { opacity: 0; transform: scale(1.04); }
+    .lecture-row.is-manual.is-state-b .lecture-pair__img--b { opacity: 1; transform: scale(1); }
+    .lecture-row.is-manual.is-state-b .lecture-pair__chip--a { opacity: 0; }
+    .lecture-row.is-manual.is-state-b .lecture-pair__chip--b { opacity: 1; }
+
+    /* Indicateurs de state (dots + names) suivent aussi le bouton en mode manuel */
+    .lecture-row.is-manual .lecture-state__dot::after,
+    .lecture-row.is-manual .lecture-state__name {
+      animation: none !important;
+      transition: color 400ms ease, background-color 400ms ease, transform 400ms ease;
+    }
+    .lecture-row.is-manual .lecture-state--a .lecture-state__name { color: rgba(56, 66, 73, 0.95); }
+    .lecture-row.is-manual .lecture-state--b .lecture-state__name { color: rgba(56, 66, 73, 0.40); }
+    .lecture-row.is-manual.is-state-b .lecture-state--a .lecture-state__name { color: rgba(56, 66, 73, 0.40); }
+    .lecture-row.is-manual.is-state-b .lecture-state--b .lecture-state__name { color: rgba(56, 66, 73, 0.95); }
+
+    /* Responsive — pile une colonne sous 820px, garde l'ordre logique (image au-dessus du texte) */
+    @media (max-width: 820px) {
+      .lecture-row,
+      .lecture-row--img-left,
+      .lecture-row--img-right { grid-template-columns: 1fr; }
+      .lecture-row .lecture-pair       { grid-column: 1; grid-row: 1; }
+      .lecture-row .lecture-row__text  { grid-column: 1; grid-row: 2; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lecture-pair__img, .lecture-pair__chip { animation: none !important; }
+      .lecture-pair__img--a, .lecture-pair__chip--a { opacity: 1; }
+      .lecture-pair__img--b, .lecture-pair__chip--b { opacity: 0; }
+    }
+
+    /* (Ancien bloc .fade-pair retiré — la section Lectures utilise maintenant
+       .lecture-pair avec interaction hover/tap, voir plus bas.) */
+
+    @media (prefers-reduced-motion: reduce) {
+      img.hero__video, img.strip__video, img.scrub__video,
+      .hero__video--motion, .scrub__video--motion,
+      .space, .space__media img, .gallery__item img { animation: none !important; transition: none !important; }
+    }
+
+    /* ── Section AMENITIES — douze raisons de visiter (grille 3×4) ───────── */
+    .amenities {
+      padding: clamp(5rem, 10vh, 9rem) clamp(1.25rem, 4vw, 4rem);
+      background: #faf7f0;
+      color: var(--ink);
+    }
+    .amenities__head {
+      max-width: 1480px; margin: 0 auto clamp(2.5rem, 6vh, 5rem);
+      text-align: center;
+    }
+    .amenities__eyebrow {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      font-weight: 500;
+      color: rgba(56, 66, 73, 0.55);
+      margin-bottom: 1rem;
+    }
+    .amenities__title {
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(2rem, 4.5vw, 3.6rem);
+      letter-spacing: -0.02em; line-height: 1.05;
+      margin: 0 0 0.8rem; color: var(--ink);
+    }
+    .amenities__title em { font-style: italic; font-weight: 400; color: rgba(56, 66, 73, 0.55); }
+    .amenities__sub {
+      max-width: 56ch; margin: 0 auto;
+      color: rgba(56, 66, 73, 0.6);
+      font-size: 0.95rem; line-height: 1.6;
+    }
+    /* Grille éditoriale — dividers fins entre les cellules, façon fiche */
+    .amenities__grid {
+      max-width: 1480px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(56, 66, 73, 0.14);
+    }
+    .amenity {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 0.9rem;
+      padding: clamp(1.6rem, 3vh, 2.4rem) clamp(1.2rem, 2.2vw, 2rem);
+      border-bottom: 1px solid rgba(56, 66, 73, 0.14);
+      border-right: 1px solid rgba(56, 66, 73, 0.14);
+      background: transparent;
+      transition: background 360ms ease, color 360ms ease;
+      min-height: 220px;
+    }
+    .amenity:nth-child(3n) { border-right: 0; }
+
+    /* Image dédiée révélée au survol (panneaux solaires pour la PEB, etc.) */
+    .amenity__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 520ms cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    .amenity__bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.06);
+      transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+      filter: saturate(0.92) contrast(1.04);
+    }
+    /* Voile noir 100% Black (charte Christie's) pour conserver la lisibilité */
+    .amenity__bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.42) 0%,
+        rgba(0, 0, 0, 0.62) 100%);
+      pointer-events: none;
+    }
+    .amenity > svg,
+    .amenity > h3,
+    .amenity > p { position: relative; z-index: 1; }
+
+    .amenity:hover .amenity__bg,
+    .amenity:focus-within .amenity__bg { opacity: 1; }
+    .amenity:hover .amenity__bg img,
+    .amenity:focus-within .amenity__bg img { transform: scale(1.0); }
+
+    /* Inversion typographie quand l'image est révélée (charte : blanc sur fond sombre) */
+    .amenity:hover .amenity__icon,
+    .amenity:focus-within .amenity__icon { stroke: #ffffff; opacity: 1; }
+    .amenity:hover .amenity__title,
+    .amenity:focus-within .amenity__title { color: #ffffff; }
+    .amenity:hover .amenity__desc,
+    .amenity:focus-within .amenity__desc { color: rgba(255, 255, 255, 0.86); }
+    .amenity__icon {
+      width: 28px; height: 28px;
+      stroke: var(--ink);
+      stroke-width: 1.4;
+      fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
+      opacity: 0.88;
+    }
+    /* Icon stroke draw-in : la longueur du path est mesurée en JS et stockée
+       dans --len ; on déclenche le tracé en bougeant --off de --len à 0 quand
+       le parent .amenities__grid reçoit .is-grid-in. Stagger par nth-child. */
+    .amenity__icon path {
+      stroke-dasharray: var(--len, 200);
+      stroke-dashoffset: var(--off, 200);
+      transition: stroke-dashoffset 1.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .amenities__grid.is-grid-in .amenity__icon path { --off: 0; }
+    .amenities__grid.is-grid-in .amenity:nth-child(1) .amenity__icon path { transition-delay: 0.05s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(2) .amenity__icon path { transition-delay: 0.14s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(3) .amenity__icon path { transition-delay: 0.23s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(4) .amenity__icon path { transition-delay: 0.32s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(5) .amenity__icon path { transition-delay: 0.41s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(6) .amenity__icon path { transition-delay: 0.50s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(7) .amenity__icon path { transition-delay: 0.59s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(8) .amenity__icon path { transition-delay: 0.68s; }
+    .amenities__grid.is-grid-in .amenity:nth-child(9) .amenity__icon path { transition-delay: 0.77s; }
+    @media (prefers-reduced-motion: reduce) {
+      .amenity__icon path { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; }
+    }
+    .amenity__title {
+      font-family: var(--display); font-weight: 500;
+      font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+      letter-spacing: -0.01em; line-height: 1.2;
+      margin: 0; color: var(--ink);
+    }
+    .amenity__desc {
+      font-family: var(--sans);
+      font-size: 0.86rem; line-height: 1.5;
+      color: rgba(56, 66, 73, 0.62);
+      margin: 0;
+    }
+    @media (max-width: 880px) {
+      .amenities__grid { grid-template-columns: repeat(2, 1fr); }
+      .amenity:nth-child(3n) { border-right: 1px solid rgba(56, 66, 73, 0.14); }
+      .amenity:nth-child(2n) { border-right: 0; }
+    }
+    @media (max-width: 540px) {
+      .amenities__grid { grid-template-columns: 1fr; }
+      .amenity { border-right: 0 !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Barre de progression de scroll, fixée tout en haut -->
+  <div class="progress" data-progress aria-hidden="true"></div>
+
+  <!-- ─────────────────────────────────────────────────────────────
+       NAVIGATION
+       Barre fine, fixe, qui s'opacifie au scroll.
+  ────────────────────────────────────────────────────────────── -->
+  <header class="nav" data-nav>
+    <a class="nav__brand" href="#top" aria-label="Christie's International Real Estate Belgium — accueil">
+      <img src="assets/brand/cire-belgium-black.svg" alt="Christie's International Real Estate" class="nav__brand-logo nav__brand-logo--black" width="240" height="99" />
+      <img src="assets/brand/cire-belgium-white.svg" alt="" aria-hidden="true" class="nav__brand-logo nav__brand-logo--white" width="240" height="99" />
+    </a>
+    <nav class="nav__links" aria-label="Navigation principale" data-nav-links>
+      <!-- Pilule liquid glass (positionnée en JS, suit le hover / section active) -->
+      <span class="nav__pill" data-nav-pill aria-hidden="true">
+        <span class="nav__pill-blur"></span>
+        <span class="nav__pill-tint"></span>
+        <span class="nav__pill-highlight"></span>
+      </span>
+      <a href="#mesures">Mesures</a>
+      <a href="#lectures">Atlas</a>
+      <a href="#espaces">Espaces</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#localisation">Localisation</a>
+    </nav>
+    <div class="nav__right">
+      <a href="#contact" class="nav__cta">Réservez votre visite</a>
+      <!-- Sélecteur de langue : pill VERTICALE à droite du CTA -->
+      <div class="lang lang--vertical" data-lang aria-label="Choisir la langue">
+      <button type="button" class="lang__btn is-active" data-lang-set="fr" aria-label="Français" aria-pressed="true">
+        <svg viewBox="0 0 3 2" aria-hidden="true">
+          <rect width="1" height="2" x="0" fill="#0055A4"/>
+          <rect width="1" height="2" x="1" fill="#ffffff"/>
+          <rect width="1" height="2" x="2" fill="#EF4135"/>
+        </svg>
+      </button>
+      <button type="button" class="lang__btn" data-lang-set="en" aria-label="English" aria-pressed="false">
+        <svg viewBox="0 0 60 30" aria-hidden="true">
+          <clipPath id="lang-uk-clip"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+          <rect width="60" height="30" fill="#012169"/>
+          <g clip-path="url(#lang-uk-clip)">
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#ffffff" stroke-width="6"/>
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="3"/>
+            <path d="M30,0 v30 M0,15 h60" stroke="#ffffff" stroke-width="10"/>
+            <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+          </g>
+        </svg>
+      </button>
+      <button type="button" class="lang__btn" data-lang-set="nl" aria-label="Nederlands" aria-pressed="false">
+        <svg viewBox="0 0 9 6" aria-hidden="true">
+          <rect width="9" height="2" y="0" fill="#AE1C28"/>
+          <rect width="9" height="2" y="2" fill="#ffffff"/>
+          <rect width="9" height="2" y="4" fill="#21468B"/>
+        </svg>
+      </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ─────────────────────────────────────────────────────────
+         00 · HERO
+    ────────────────────────────────────────────────────────── -->
+    <section class="hero" data-hero data-section="top">
+      <div class="hero__media">
+        <video
+          class="hero__video hero__video--vivid"
+          src="assets/videos/hero.mp4"
+          poster="assets/images/01.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          aria-label="Survol cinématique de la villa à Rhode-Saint-Genèse"
+        ></video>
+        <div class="hero__veil" aria-hidden="true"></div>
+      </div>
+
+      <!-- Bandeau supérieur : référence + statut -->
+      <div class="hero__top">
+        <span class="hero__ref">Réf. 12/0339</span>
+        <span class="hero__loc">Rhode-Saint-Genèse · Belgique</span>
+        <span class="hero__status"><span class="dot"></span>Disponible</span>
+      </div>
+
+      <!-- Statement -->
+      <div class="hero__content hero__content--center" data-hero-content>
+        <h1 class="hero__title hero__title--white">
+          <span class="hero__line hero__line--sub">Villa contemporaine</span>
+          <span class="hero__line">Rhode-Saint-Genèse</span>
+        </h1>
+      </div>
+
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         02 · MESURES — fiche technique (juste après le hero)
+    ────────────────────────────────────────────────────────── -->
+    <section class="specs" id="mesures" data-section="mesures">
+      <header class="specs__head reveal">
+        <h2 class="specs__title">Fiche technique</h2>
+      </header>
+
+      <div class="specs__grid">
+        <div class="spec reveal">
+          <span class="spec__lab">Surface habitable</span>
+          <span class="spec__num"><span data-count-to="450">0</span><i>m²</i></span>
+        </div>
+        <div class="spec reveal">
+          <span class="spec__lab">Terrain</span>
+          <span class="spec__num"><span data-count-to="2420" data-count-format="thousands">0</span><i>m²</i></span>
+        </div>
+        <div class="spec reveal">
+          <span class="spec__lab">Façades</span>
+          <span class="spec__num"><span data-count-to="4">0</span></span>
+        </div>
+        <div class="spec reveal">
+          <span class="spec__lab">Chambres</span>
+          <span class="spec__num"><span data-count-to="5">0</span></span>
+        </div>
+        <div class="spec reveal">
+          <span class="spec__lab">Salles de bains</span>
+          <span class="spec__num"><span data-count-to="3">0</span></span>
+        </div>
+        <div class="spec reveal">
+          <span class="spec__lab">Garage</span>
+          <span class="spec__num"><span data-count-to="2">0</span></span>
+        </div>
+      </div>
+
+      <div class="specs__footnote reveal">
+        <ul>
+          <li><span>Style</span><span>Contemporain &amp; durable</span></li>
+          <li><span>Construction</span><span>1960, rénovée 2021-2022</span></li>
+          <li><span>Configuration</span><span>Vie de plain-pied</span></li>
+          <li><span>PEB</span><span>A — exemplaire</span></li>
+          <li><span>Chauffage</span><span>Gaz</span></li>
+          <li><span>Sous-sol</span><span>100 m² (cave à vins)</span></li>
+          <li><span>Stationnement</span><span>2 garages + 4 places</span></li>
+          <li><span>Localisation</span><span>Rhode-Saint-Genèse — Grande Espinette</span></li>
+          <li><span>Distinction</span><span>Cul-de-sac · vues sur champs</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         FILM STRIP A — vers Architecture (vidéo 2.mp4)
+    ────────────────────────────────────────────────────────── -->
+    <section class="strip" data-strip>
+      <div class="strip__sticky">
+        <img class="strip__video strip__video--motion" src="assets/images/02.jpg" alt="Arrivée à la villa, au bout du cul-de-sac" />
+
+        <div class="strip__info">
+          <h3 class="strip__title" data-strip-anim>
+            Au bout du chemin,
+            <em>le silence.</em>
+          </h3>
+          <p class="strip__desc" data-strip-anim>
+            Au bout d'un cul-de-sac sans aucune circulation, la villa se révèle
+            dans un écrin verdoyant d'une rare tranquillité. Les champs ouverts
+            comme horizon, à quelques minutes de Bruxelles.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────────
+         02b · LECTURES — zigzag éditorial (image / texte alternés)
+         Le visiteur survole (desktop) ou tape (mobile) une image
+         pour basculer entre les deux lectures (vide↔meublé · jour↔nuit).
+    ────────────────────────────────────────────────────────── -->
+    <section class="atlas" id="lectures" data-section="lectures">
+      <header class="atlas__head reveal">
+        <span class="atlas__eyebrow" data-i18n="atlas.eyebrow">— Atlas</span>
+        <h2 class="atlas__title">
+          La villa,
+          <em>en quatre atmosphères.</em>
+        </h2>
+        <span class="atlas__rule" aria-hidden="true"></span>
+      </header>
+
+      <!-- Spread I — L'aérien -->
+      <article class="spread spread--img-left reveal" data-spread>
+        <figure class="spread__media">
+          <img class="spread__img spread__img--day"   src="assets/images/sp-aerien-day.jpg"   alt="Vue aérienne de la villa, en plein jour" loading="lazy" />
+          <img class="spread__img spread__img--night" src="assets/images/sp-aerien-night.jpg" alt="Vue aérienne de la villa, la nuit" loading="lazy" />
+        </figure>
+        <div class="spread__info">
+          <span class="spread__roman" aria-hidden="true">I</span>
+          <div class="spread__head">
+            <span class="spread__eyebrow">Atmosphère 01</span>
+            <span class="spread__line" aria-hidden="true"></span>
+          </div>
+          <h3 class="spread__title"><em>L'aérien.</em></h3>
+          <p class="spread__tag">Au bout d'un cul-de-sac privé, sans aucun vis-à-vis.</p>
+          <p class="spread__body">
+            La villa occupe un terrain de 2&nbsp;420&nbsp;m² (dont 1&nbsp;900&nbsp;m²
+            de jardin paysager) au bout d'une allée privée, dans le quartier prisé
+            de la Grande Espinette. Calme absolu, environnement résidentiel de premier
+            plan — à quinze minutes du centre de Bruxelles.
+          </p>
+          <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
+            <span class="spread__toggle-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path class="t-sun"  d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6L4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4"/>
+                <circle class="t-sun-c" cx="12" cy="12" r="4"/>
+                <path class="t-moon" d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>
+              </svg>
+            </span>
+            <span class="spread__toggle-label" data-spread-label>Voir la nuit</span>
+          </button>
+          <span class="spread__seal">— Grande Espinette · Rhode-Saint-Genèse</span>
+        </div>
+      </article>
+
+      <!-- Spread II — L'entrée -->
+      <article class="spread spread--img-right reveal" data-spread>
+        <figure class="spread__media">
+          <img class="spread__img spread__img--day"   src="assets/images/sp-entree-day.jpg"   alt="L'entrée, façade en brique noire et baies toute hauteur" loading="lazy" />
+          <img class="spread__img spread__img--night" src="assets/images/sp-entree-night.jpg" alt="L'entrée éclairée la nuit" loading="lazy" />
+        </figure>
+        <div class="spread__info">
+          <span class="spread__roman" aria-hidden="true">II</span>
+          <div class="spread__head">
+            <span class="spread__eyebrow">Atmosphère 02</span>
+            <span class="spread__line" aria-hidden="true"></span>
+          </div>
+          <h3 class="spread__title"><em>L'entrée.</em></h3>
+          <p class="spread__tag">L'esprit moderniste, en brique noire et verre.</p>
+          <p class="spread__body">
+            Façade en brique noire ponctuée de grandes baies vitrées et d'un portail
+            métallique en clair-obscur. L'extension contemporaine dialogue avec les
+            volumes blancs originels — lignes nettes, matériaux durables, écriture
+            cohérente du seuil aux pièces de vie.
+          </p>
+          <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
+            <span class="spread__toggle-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path class="t-sun"  d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6L4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4"/>
+                <circle class="t-sun-c" cx="12" cy="12" r="4"/>
+                <path class="t-moon" d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>
+              </svg>
+            </span>
+            <span class="spread__toggle-label" data-spread-label>Voir la nuit</span>
+          </button>
+          <span class="spread__seal">— Rénovée 2021-2022</span>
+        </div>
+      </article>
+
+      <!-- Spread III — La piscine -->
+      <article class="spread spread--img-left reveal" data-spread>
+        <figure class="spread__media">
+          <img class="spread__img spread__img--day"   src="assets/images/sp-piscine-day.jpg"   alt="La piscine, vue zénithale en plein jour" loading="lazy" />
+          <img class="spread__img spread__img--night" src="assets/images/sp-piscine-night.jpg" alt="La piscine éclairée la nuit" loading="lazy" />
+        </figure>
+        <div class="spread__info">
+          <span class="spread__roman" aria-hidden="true">III</span>
+          <div class="spread__head">
+            <span class="spread__eyebrow">Atmosphère 03</span>
+            <span class="spread__line" aria-hidden="true"></span>
+          </div>
+          <h3 class="spread__title"><em>La piscine.</em></h3>
+          <p class="spread__tag">Le jardin au rythme des saisons.</p>
+          <p class="spread__body">
+            Bassin extérieur, plage en pierre claire, lounges intégrés sous les haies
+            taillées. Orienté plein sud, le bassin profite du soleil toute l'après-midi ;
+            au crépuscule, les éclairages immergés le transforment en miroir lumineux —
+            scénographie discrète, comme une parenthèse sur le jardin.
+          </p>
+          <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
+            <span class="spread__toggle-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path class="t-sun"  d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6L4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4"/>
+                <circle class="t-sun-c" cx="12" cy="12" r="4"/>
+                <path class="t-moon" d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>
+              </svg>
+            </span>
+            <span class="spread__toggle-label" data-spread-label>Voir la nuit</span>
+          </button>
+          <span class="spread__seal">— Plein sud</span>
+        </div>
+      </article>
+
+      <!-- Spread IV — Le jardin -->
+      <article class="spread spread--img-right reveal" data-spread>
+        <figure class="spread__media">
+          <img class="spread__img spread__img--day"   src="assets/images/sp-jardin-day.jpg"   alt="Le jardin paysager, façade arrière et piscine au soleil" loading="lazy" />
+          <img class="spread__img spread__img--night" src="assets/images/sp-jardin-night.jpg" alt="Le jardin paysager éclairé la nuit, façade arrière" loading="lazy" />
+        </figure>
+        <div class="spread__info">
+          <span class="spread__roman" aria-hidden="true">IV</span>
+          <div class="spread__head">
+            <span class="spread__eyebrow">Atmosphère 04</span>
+            <span class="spread__line" aria-hidden="true"></span>
+          </div>
+          <h3 class="spread__title"><em>Le jardin.</em></h3>
+          <p class="spread__tag">1 900 m² d'écrin paysager, sans vis-à-vis.</p>
+          <p class="spread__body">
+            Vaste pelouse engazonnée, rhododendrons en fleur, hêtres pourpres et haies
+            de charme taillées encadrent la piscine. À la tombée du jour, l'éclairage
+            architectural sculpte la façade arrière et le bassin — le jardin se prolonge
+            naturellement la nuit, scène discrète et lumineuse.
+          </p>
+          <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
+            <span class="spread__toggle-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path class="t-sun"  d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6L4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4"/>
+                <circle class="t-sun-c" cx="12" cy="12" r="4"/>
+                <path class="t-moon" d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>
+              </svg>
+            </span>
+            <span class="spread__toggle-label" data-spread-label>Voir la nuit</span>
+          </button>
+          <span class="spread__seal">— Éclairage architectural intégré</span>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         03 · ESPACES — scroll horizontal pinné, 9 univers
+    ────────────────────────────────────────────────────────── -->
+    <section class="spaces" id="espaces" data-spaces data-section="espaces">
+      <header class="spaces__head reveal">
+        <div class="chap-mark">
+          <span class="chap-mark__num">04</span>
+          <span class="chap-mark__lab">Espaces</span>
+        </div>
+        <h2 class="spaces__title">
+          Six univers,
+          <em>un même langage.</em>
+        </h2>
+        <p class="spaces__sub">
+          Faites défiler — la villa se déploie horizontalement.
+        </p>
+      </header>
+
+      <div class="spaces__pin">
+        <div class="spaces__track" data-spaces-track>
+
+          <article class="space" role="button" tabindex="0"
+                   data-space
+                   data-space-images="assets/images/06.jpg,assets/images/04.jpg,assets/images/05.jpg,assets/images/am-plain-pied.jpg"
+                   data-space-detail="Pièce traversante baignée de lumière du sud, ouverte sur la terrasse et les champs. Le séjour articule la vie de réception sans cloisonner : salon, cheminée, espace lecture et grandes baies coulissantes vers le jardin.">
+            <figure class="space__media"><img src="assets/images/06.jpg" alt="Le séjour traversant" loading="lazy" /></figure>
+            <div class="space__text">
+              <span class="space__num">01 / 06</span>
+              <h3 class="space__name">Le séjour traversant</h3>
+              <p class="space__desc">Pièce de vie inondée de lumière, ouverte sur la terrasse et les champs. Le cœur paisible de la maison.</p>
+            </div>
+          </article>
+
+          <article class="space" role="button" tabindex="0"
+                   data-space
+                   data-space-images="assets/images/08.jpg,assets/images/sp-cuisine-2.jpg"
+                   data-space-detail="Cuisine entièrement équipée — îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.">
+            <figure class="space__media"><img src="assets/images/08.jpg" alt="La cuisine contemporaine" loading="lazy" /></figure>
+            <div class="space__text">
+              <span class="space__num">02 / 06</span>
+              <h3 class="space__name">La cuisine contemporaine</h3>
+              <p class="space__desc">Cuisine entièrement équipée, ouverte sur la salle à manger, en dialogue permanent avec le paysage.</p>
+            </div>
+          </article>
+
+          <article class="space" role="button" tabindex="0"
+                   data-space
+                   data-space-images="assets/images/12.jpg,assets/images/sp-suite-1.jpg,assets/images/22.jpg,assets/images/15.jpg,assets/images/am-chambres.jpg"
+                   data-space-detail="Chambre principale ouverte sur le jardin par une baie toute hauteur, dressing en enfilade et salle de bains attenante en pierre claire. Une suite de plain-pied, retirée du reste de la maison, pensée comme une parenthèse.">
+            <figure class="space__media"><img src="assets/images/12.jpg" alt="La suite parentale" loading="lazy" /></figure>
+            <div class="space__text">
+              <span class="space__num">03 / 06</span>
+              <h3 class="space__name">La suite parentale</h3>
+              <p class="space__desc">Chambre, dressing et salle de bains attenante. Une suite de plain-pied, retirée du monde.</p>
+            </div>
+          </article>
+
+          <article class="space" role="button" tabindex="0"
+                   data-space
+                   data-space-images="assets/images/24.jpg,assets/images/25.jpg,assets/images/28.jpg,assets/images/33.jpg"
+                   data-space-detail="Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité — pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.">
+            <figure class="space__media"><img src="assets/images/24.jpg" alt="La piscine" loading="lazy" /></figure>
+            <div class="space__text">
+              <span class="space__num">04 / 06</span>
+              <h3 class="space__name">La piscine</h3>
+              <p class="space__desc">Bassin extérieur, plage en pierre claire, ouvert sur le jardin et les haies taillées.</p>
+            </div>
+          </article>
+
+          <article class="space" role="button" tabindex="0"
+                   data-space
+                   data-space-images="assets/images/19.jpg,assets/images/sp-cave-bottles.jpg,assets/images/sp-cave-wide.jpg"
+                   data-space-detail="Cave en triangulation chêne massif, climatisée, taillée pour les amateurs. Une parenthèse minérale et chaleureuse au sous-sol, accessible discrètement depuis la cuisine. Capacité généreuse, éclairage muséal.">
+            <figure class="space__media"><img src="assets/images/19.jpg" alt="La cave à vins" loading="lazy" /></figure>
+            <div class="space__text">
+              <span class="space__num">05 / 06</span>
+              <h3 class="space__name">La cave à vins</h3>
+              <p class="space__desc">Climatisée, taillée pour les amateurs. Une parenthèse minérale au sous-sol.</p>
+            </div>
+          </article>
+
+          <article class="space" role="button" tabindex="0"
+                   data-space
+                   data-space-images="assets/images/03.jpg,assets/images/29.jpg,assets/images/31.jpg,assets/images/33.jpg"
+                   data-space-detail="2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts — à dix minutes de Bruxelles.">
+            <figure class="space__media"><img src="assets/images/03.jpg" alt="Le jardin et les champs" loading="lazy" /></figure>
+            <div class="space__text">
+              <span class="space__num">06 / 06</span>
+              <h3 class="space__name">Le jardin & les champs</h3>
+              <p class="space__desc">2.420 m² de terrain en lisière des champs ouverts. Une sensation d'évasion, à dix minutes de Bruxelles.</p>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Indicateur de progression horizontale -->
+        <div class="spaces__hud" aria-hidden="true">
+          <div class="spaces__count">
+            <span data-spaces-current>01</span>
+            <span class="spaces__count-sep">/</span>
+            <span>06</span>
+          </div>
+          <div class="spaces__bar"><div class="spaces__bar-fill" data-spaces-bar></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         SPACES — Modal détail (mini-galerie + texte)
+    ────────────────────────────────────────────────────────── -->
+    <div class="sp-modal" data-sp-modal hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="sp-modal-title">
+      <button class="sp-modal__backdrop" type="button" data-sp-close aria-label="Fermer"></button>
+      <div class="sp-modal__panel" role="document">
+        <button class="sp-modal__close" type="button" data-sp-close aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="sp-modal__media">
+          <img data-sp-main src="" alt="" />
+          <button class="sp-modal__nav sp-modal__nav--prev" type="button" data-sp-prev aria-label="Image précédente">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="sp-modal__nav sp-modal__nav--next" type="button" data-sp-next aria-label="Image suivante">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <span class="sp-modal__counter" data-sp-counter></span>
+        </div>
+        <div class="sp-modal__thumbs" data-sp-thumbs></div>
+        <div class="sp-modal__body">
+          <span class="sp-modal__eyebrow">— Espace</span>
+          <h3 class="sp-modal__title" id="sp-modal-title" data-sp-title></h3>
+          <p class="sp-modal__detail" data-sp-detail></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────
+         04a · AMENITIES — douze raisons de visiter
+    ────────────────────────────────────────────────────────── -->
+    <section class="amenities" id="raisons" data-section="raisons">
+      <header class="amenities__head reveal">
+        <span class="amenities__eyebrow">Neuf raisons</span>
+        <h2 class="amenities__title">
+          Neuf raisons
+          <em>de visiter.</em>
+        </h2>
+        <p class="amenities__sub">
+          Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs — chaque détail compte.
+        </p>
+      </header>
+
+      <div class="amenities__grid">
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-architecture.jpg"
+                 data-amenity-detail="Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre — depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-architecture.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>
+          </svg>
+          <h3 class="amenity__title">Architecture moderniste</h3>
+          <p class="amenity__desc">Rénovation et extension neuve, volumes contemporains.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-champs.jpg"
+                 data-amenity-detail="Depuis chaque pièce de réception, le regard se perd dans les champs ouverts. Une sensation d'évasion permanente, sans vis-à-vis, à seulement dix minutes du centre de Bruxelles. Aux beaux jours, la frontière entre intérieur et paysage s'estompe.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-champs.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12c0-2 1.5-4 4-4s4 2 6 4 4 4 6 4 4-2 4-4-1.5-4-4-4-4 2-6 4-4 4-6 4-4-2-4-4z"/>
+          </svg>
+          <h3 class="amenity__title">Vues sur les champs</h3>
+          <p class="amenity__desc">Vues ouvertes, sensation d'évasion permanente.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-plain-pied.jpg"
+                 data-amenity-detail="Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir — sans escalier entre les pièces de vie.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-plain-pied.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+          <h3 class="amenity__title">Vie de plain-pied</h3>
+          <p class="amenity__desc">L'essentiel de la maison sur un seul niveau.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-chambres.jpg"
+                 data-amenity-detail="Suite parentale avec dressing en enfilade et salle de bains attenante, quatre chambres à l'étage et trois salles de bains au total. Pensé pour les familles ou pour recevoir confortablement.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-chambres.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 21V8a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v13"/>
+            <path d="M2 21h20M9 13h6M9 17h6"/>
+          </svg>
+          <h3 class="amenity__title">Cinq chambres</h3>
+          <p class="amenity__desc">Une suite parentale et quatre chambres à l'étage.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-peb.jpg"
+                 data-amenity-detail="Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A — l'un des meilleurs niveaux de performance énergétique en Belgique.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-peb.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+          <h3 class="amenity__title">Performance énergétique</h3>
+          <p class="amenity__desc">Panneaux solaires, PEB A, confort optimal en toute saison.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-garage.jpg"
+                 data-amenity-detail="Garage intégré à la villa avec accès direct par le hall. Espace généreux pour les vélos électriques et un véhicule compact (Citroën Ami inclus), parfait pour la mobilité urbaine du quotidien.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-garage.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M5 12V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5M5 12v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>
+            <circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/>
+          </svg>
+          <h3 class="amenity__title">Garage 2 voitures</h3>
+          <p class="amenity__desc">Intégré à la villa, accès direct depuis l'entrée.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-cave.jpg"
+                 data-amenity-detail="Cave aux casiers triangulaires en chêne massif, climatisée et taillée pour les amateurs. Une parenthèse minérale et chaleureuse au sous-sol, accessible discrètement depuis la cuisine.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-cave.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16v14H4zM4 6V4h16v2M8 10h8M8 14h8"/>
+          </svg>
+          <h3 class="amenity__title">Cave à vins climatisée</h3>
+          <p class="amenity__desc">Espace dédié, température maîtrisée.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-terrain.jpg"
+                 data-amenity-detail="Un terrain de 2.420 m² en lisière des champs ouverts, parfaitement entretenu : grand jardin engazonné, terrasses, piscine et haies taillées. Une rareté à cette proximité immédiate de Bruxelles.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-terrain.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 22V12M8 12c-1-3 2-6 4-6s5 3 4 6c-1 3-4 3-8 0z"/>
+            <path d="M12 18l-3-3M12 18l3-3"/>
+          </svg>
+          <h3 class="amenity__title">2.420 m² de terrain</h3>
+          <p class="amenity__desc">Jardin, terrasse et nature environnante.</p>
+        </article>
+
+        <article class="amenity reveal" role="button" tabindex="0"
+                 data-amenity
+                 data-amenity-img="assets/images/am-cul-de-sac.jpg"
+                 data-amenity-detail="Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes — à dix minutes du centre de Bruxelles.">
+          <div class="amenity__bg" aria-hidden="true">
+            <img src="assets/images/am-cul-de-sac.jpg" alt="" loading="lazy" />
+          </div>
+          <svg class="amenity__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 22s-7-7-7-13a7 7 0 0 1 14 0c0 6-7 13-7 13z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          <h3 class="amenity__title">Cul-de-sac</h3>
+          <p class="amenity__desc">Aucune circulation, tranquillité absolue.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         AMENITIES — Modal détail (lightbox)
+    ────────────────────────────────────────────────────────── -->
+    <div class="am-modal" data-am-modal hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="am-modal-title">
+      <button class="am-modal__backdrop" type="button" data-am-close aria-label="Fermer"></button>
+      <div class="am-modal__panel" role="document">
+        <button class="am-modal__close" type="button" data-am-close aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <figure class="am-modal__media">
+          <img data-am-img src="" alt="" />
+        </figure>
+        <div class="am-modal__body">
+          <span class="am-modal__eyebrow">— Raison de visiter</span>
+          <h3 class="am-modal__title" id="am-modal-title" data-am-title></h3>
+          <p class="am-modal__detail" data-am-detail></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────
+         04b · FILMS — trois vidéos en grille compacte, lecture continue
+    ────────────────────────────────────────────────────────── -->
+    <section class="films-fs" id="films" data-section="films">
+      <header class="films-fs__head reveal">
+        <span class="films-fs__eyebrow">04 · Film</span>
+      </header>
+
+      <div class="films-fs__grid">
+
+        <figure class="ff-card ff-card--landscape reveal">
+          <img class="ff-card__video" src="assets/images/03.jpg" alt="Vue arrière de la villa vers les champs" loading="lazy" />
+        </figure>
+
+        <figure class="ff-card reveal">
+          <img class="ff-card__video" src="assets/images/11.jpg" alt="Détail intérieur" loading="lazy" />
+        </figure>
+
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         04c · CINÉMA — plan unique, vidéo full-bleed, texte révélé
+    ────────────────────────────────────────────────────────── -->
+    <section class="cinemo" id="cinema" data-section="cinema">
+      <!-- Unsharp mask SVG (kernel 3x3, somme=1) référencé par la vidéo. -->
+      <svg class="cinemo__svgdefs" aria-hidden="true" focusable="false" width="0" height="0">
+        <defs>
+          <filter id="cinemo-sharpen" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feConvolveMatrix
+              order="3"
+              preserveAlpha="true"
+              kernelMatrix="0 -0.6 0 -0.6 3.4 -0.6 0 -0.6 0"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      <div class="cinemo__media">
+        <video
+          class="cinemo__video"
+          src="assets/videos/orbit.mp4"
+          poster="assets/images/01.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          aria-label="Orbite cinématique autour de la villa"
+        ></video>
+      </div>
+
+      <div class="cinemo__inner">
+        <span class="cinemo__eyebrow">05 · Paysage</span>
+        <h2 class="cinemo__title">
+          <span class="cinemo__mask"><span class="cinemo__word">La maison</span></span>
+          <span class="cinemo__mask"><span class="cinemo__word">qui regarde</span></span>
+          <span class="cinemo__mask"><span class="cinemo__word"><em>les champs.</em></span></span>
+        </h2>
+        <p class="cinemo__lede">
+          Depuis la terrasse, la cuisine et les espaces de réception, la maison
+          dialogue en permanence avec le paysage. Une atmosphère paisible,
+          presque vacancière — à seulement quelques minutes de Bruxelles.
+        </p>
+        <span class="cinemo__hairline"></span>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         05 · GALERIE — 18 vues, lightbox
+    ────────────────────────────────────────────────────────── -->
+    <section class="gallery" id="galerie" data-section="galerie">
+      <header class="gallery__head reveal">
+        <div class="gallery__head-row">
+          <div class="chap-mark">
+            <span class="chap-mark__num">06</span>
+            <span class="chap-mark__lab">Galerie</span>
+          </div>
+          <span class="gallery__count">
+            <span data-gallery-count>35</span> vues
+          </span>
+        </div>
+        <h2 class="gallery__title">
+          Trente-cinq regards <em>sur la villa.</em>
+        </h2>
+        <p class="gallery__sub">Cliquez sur une image pour l'ouvrir en plein écran.</p>
+      </header>
+
+      <div class="gallery__grid" data-gallery>
+        <!-- Les images sont injectées par script.js -->
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         06 · LOCALISATION
+    ────────────────────────────────────────────────────────── -->
+    <section class="location" id="localisation" data-section="localisation">
+      <figure class="location__media reveal" data-photo-anim>
+        <img
+          src="assets/images/location.jpg"
+          alt="La villa et son écrin paysager — vue depuis le jardin"
+          loading="lazy"
+          data-parallax="0.25"
+        />
+      </figure>
+
+      <div class="location__content reveal">
+        <div class="chap-mark">
+          <span class="chap-mark__num">07</span>
+          <span class="chap-mark__lab">Localisation</span>
+        </div>
+        <h2 class="location__title">
+          Rhode-Saint-Genèse,
+          <em>au bout d'un cul-de-sac.</em>
+        </h2>
+        <p class="location__para">
+          Aux confins de la forêt de Soignes, dans un environnement verdoyant
+          d'une rare tranquillité, la villa s'installe au bout d'un cul-de-sac
+          sans aucune circulation. Sur <strong>2.420&nbsp;m²</strong> de terrain,
+          face aux champs ouverts, à seulement quelques minutes de Bruxelles.
+        </p>
+
+        <ul class="location__list">
+          <li><strong>Style</strong><span>Moderniste rénové</span></li>
+          <li><strong>Localisation</strong><span>Rhode-Saint-Genèse</span></li>
+          <li><strong>Bruxelles centre</strong><span>± 15 min</span></li>
+          <li><strong>Aéroport</strong><span>± 30 min</span></li>
+          <li><strong>Forêt de Soignes</strong><span>à proximité</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         07 · CONTACT
+    ────────────────────────────────────────────────────────── -->
+    <section class="contact" id="contact" data-section="contact">
+      <div class="contact__inner reveal">
+        <span class="contact__eyebrow">— Visite privée</span>
+        <h2 class="contact__title">Organiser une visite.</h2>
+
+        <div class="contact__grid">
+          <figure class="contact__portrait reveal" data-photo-anim>
+            <img
+              src="assets/images/sylvie.jpg"
+              alt="Sylvie Koch — Christie's International Real Estate"
+              loading="lazy"
+            />
+          </figure>
+
+          <div class="contact__panel">
+            <div class="contact__agent">
+              <span class="contact__label">Votre interlocutrice</span>
+              <h3 class="contact__name">Sylvie Koch</h3>
+              <p class="contact__agency">Christie's International Real Estate</p>
+            </div>
+
+            <ul class="contact__lines">
+              <li>
+                <a href="tel:+3228080364" class="contact__line">
+                  <span class="contact__line-label">Bureau</span>
+                  <span class="contact__line-value">+32 (0)2 808 03 64</span>
+                </a>
+              </li>
+              <li>
+                <a href="tel:+32472869668" class="contact__line">
+                  <span class="contact__line-label">Mobile</span>
+                  <span class="contact__line-value">+32 (0)472 86 96 68</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:sk@christiesrealestatebelgium.be?subject=Demande de visite — Villa Rhode-Saint-Genèse" class="contact__line">
+                  <span class="contact__line-label">E-mail</span>
+                  <span class="contact__line-value contact__line-value--email">sk@christiesrealestatebelgium.be</span>
+                </a>
+              </li>
+            </ul>
+
+            <a
+              href="mailto:sk@christiesrealestatebelgium.be?subject=Demande de visite — Villa Rhode-Saint-Genèse"
+              class="contact__cta-pill"
+            >
+              <span>Demander une visite</span>
+              <span class="contact__cta-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ─────────────────────────────────────────────────────────
+       FOOTER
+  ────────────────────────────────────────────────────────── -->
+  <footer class="foot">
+    <div class="foot__brand">
+      <img src="assets/brand/cire-belgium-white.svg" alt="Christie's International Real Estate Belgium" class="foot__brand-logo" width="280" height="115" />
+    </div>
+    <div class="foot__legal">
+      <span>Réf. 12/0339</span>
+      <span>·</span>
+      <span>© 2026</span>
+    </div>
+  </footer>
+
+  <!-- SVG filter — distortion fractal pour la pilule liquid glass du nav -->
+  <svg style="display:none; position:absolute;" aria-hidden="true">
+    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+      <feTurbulence type="fractalNoise" baseFrequency="0.001 0.005" numOctaves="1" seed="17" result="turbulence" />
+      <feComponentTransfer in="turbulence" result="mapped">
+        <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
+        <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
+        <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
+      </feComponentTransfer>
+      <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
+      <feSpecularLighting in="softMap" surfaceScale="5" specularConstant="1" specularExponent="100" lightingColor="white" result="specLight">
+        <fePointLight x="-200" y="-200" z="300" />
+      </feSpecularLighting>
+      <feComposite in="specLight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litImage" />
+      <feDisplacementMap in="SourceGraphic" in2="softMap" scale="200" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <script src="script.js"></script>
+
+  <!-- ── STRIP "Arrivée" : animations de texte indépendantes du scrub vidéo ──
+       Le script.js gate ses anims de texte sur la présence de [data-strip-video],
+       qu'on a retirée pour laisser la vidéo en autoplay. On les ré-injecte ici.
+       Entrée en once:true → le texte reste visible quand on remonte la page,
+       et aucune anim de sortie pour qu'il ne disparaisse pas sur scroll arrière. -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('[data-strip]').forEach((section) => {
+        // Si script.js gère déjà cette section (vidéo scrubbée), on ne double pas
+        if (section.querySelector('[data-strip-video]')) return;
+        const infoEls = section.querySelectorAll('[data-strip-anim]');
+        if (!infoEls.length) return;
+        gsap.fromTo(
+          infoEls,
+          { y: 24, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.9, ease: 'expo.out', stagger: 0.06,
+            scrollTrigger: { trigger: section, start: 'top 80%', once: true },
+          }
+        );
+      });
+    });
+  </script>
+
+  <!-- ── NAV liquid glass : pilule qui suit le hover (et marque la section active) ── -->
+  <script>
+    (function () {
+      const navEl = document.querySelector('[data-nav-links]');
+      if (!navEl) return;
+      const pill  = navEl.querySelector('[data-nav-pill]');
+      const links = Array.from(navEl.querySelectorAll('a'));
+      if (!pill || !links.length) return;
+
+      let hoverIdx  = -1;
+      let activeIdx = -1;
+      let currentIdx = -1;
+
+      // Sections cibles déduites de l'attribut href
+      const sections = links.map((a) => {
+        const id = a.getAttribute('href');
+        return id && id.startsWith('#') ? document.querySelector(id) : null;
+      });
+
+      function moveTo(idx) {
+        if (idx === currentIdx) return;
+        currentIdx = idx;
+        // Reset highlight class on all links
+        links.forEach((a, i) => a.classList.toggle('is-pill-target', i === idx));
+        if (idx < 0) {
+          pill.classList.remove('is-visible');
+          return;
+        }
+        const link  = links[idx];
+        const linkR = link.getBoundingClientRect();
+        const navR  = navEl.getBoundingClientRect();
+        pill.style.transform = `translate(${linkR.left - navR.left}px, ${linkR.top - navR.top}px)`;
+        pill.style.width  = linkR.width  + 'px';
+        pill.style.height = linkR.height + 'px';
+        pill.classList.add('is-visible');
+      }
+
+      function compute() {
+        const idx = hoverIdx >= 0 ? hoverIdx : activeIdx;
+        // Force recalcul (au resize, la position du lien peut changer)
+        currentIdx = -2;
+        moveTo(idx);
+      }
+
+      links.forEach((a, i) => {
+        a.addEventListener('mouseenter', () => { hoverIdx = i; moveTo(i); });
+      });
+      navEl.addEventListener('mouseleave', () => {
+        hoverIdx = -1;
+        moveTo(activeIdx);
+      });
+
+      // Détecte la section active (le dernier élément dont le top a passé 40% du viewport)
+      function detectActive() {
+        const mid = window.innerHeight * 0.4;
+        let active = -1;
+        sections.forEach((el, i) => {
+          if (!el) return;
+          const r = el.getBoundingClientRect();
+          if (r.top <= mid) active = i;
+        });
+        if (active !== activeIdx) {
+          activeIdx = active;
+          if (hoverIdx < 0) moveTo(activeIdx);
+        }
+      }
+
+      detectActive();
+      window.addEventListener('scroll', detectActive, { passive: true });
+      window.addEventListener('resize', compute);
+      // Re-positionne après chargement des fonts (les largeurs des liens peuvent changer)
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(compute);
+    })();
+  </script>
+
+  <!-- ── Hero video : loop avec pause de 3s entre chaque cycle ── -->
+  <script>
+    (function () {
+      const v = document.querySelector('[data-hero-pause-loop]');
+      if (!v) return;
+      const PAUSE_MS = 3000;
+      let timer = 0;
+
+      v.addEventListener('ended', () => {
+        // freeze sur la dernière frame, attend 3s, puis relit depuis le début
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          try { v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+          catch (_) { /* transient */ }
+        }, PAUSE_MS);
+      });
+
+      // Si l'onglet redevient visible pendant la pause, on ne précipite rien :
+      // le timer continue. Si l'onglet a été caché et la vidéo bloquée, on relance.
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && v.paused && v.ended) {
+          // déjà géré par 'ended' → no-op ici
+        }
+      });
+    })();
+  </script>
+
+  <!-- ── Lectures : bouton de bascule manuel A↔B sur chaque paire.
+       Premier clic : la rangée passe en mode manuel (auto-cycle arrêté).
+       Chaque clic suivant flippe entre l'état A et l'état B avec un crossfade doux. ── -->
+  <script>
+    (function () {
+      document.querySelectorAll('.lecture-row').forEach((row) => {
+        const btn = row.querySelector('[data-lecture-toggle]');
+        const pair = row.querySelector('.lecture-pair');
+        if (!btn || !pair) return;
+
+        const labelEl = btn.querySelector('.lecture-row__toggle-label');
+        const labelA = btn.dataset.labelA || 'Voir l\'autre';
+        const labelB = btn.dataset.labelB || 'Revenir';
+
+        btn.addEventListener('click', () => {
+          // 1er clic : on passe en manuel (arrête l'auto-cycle)
+          if (!row.classList.contains('is-manual')) {
+            row.classList.add('is-manual');
+          }
+          const flipped = row.classList.toggle('is-state-b');
+          btn.classList.toggle('is-flipped', flipped);
+          btn.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+          if (labelEl) labelEl.textContent = flipped ? labelB : labelA;
+        });
+      });
+    })();
+  </script>
+
+  <!-- ── Vidéo "play once" : neutralise le loop forcé par l'observer mobile de script.js
+       et fige la vidéo sur sa dernière frame une fois lue. ── -->
+  <script>
+    (function () {
+      document.querySelectorAll('[data-no-loop]').forEach((v) => {
+        let completed = false;
+        v.loop = false;
+        v.removeAttribute('loop');
+
+        v.addEventListener('ended', () => {
+          completed = true;
+          v.loop = false;
+          v.removeAttribute('loop');
+        });
+
+        // À chaque play (y compris ceux déclenchés par l'IntersectionObserver mobile
+        // qui force loop=true), on annule le loop. Si la vidéo a déjà été jouée,
+        // on la repositionne à la fin et on pause.
+        v.addEventListener('play', () => {
+          v.loop = false;
+          v.removeAttribute('loop');
+          if (completed) {
+            try { v.currentTime = v.duration || 0; } catch (_) {}
+            v.pause();
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- ── CINÉMA : déclenche l'animation des mots quand la section entre en vue.
+       Une fois activée, on ne ré-observe pas (l'effet n'a lieu qu'à l'arrivée). -->
+  <script>
+    (function () {
+      const sec = document.querySelector('.cinemo');
+      if (!sec) return;
+      if (!('IntersectionObserver' in window)) {
+        sec.classList.add('is-active');
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            sec.classList.add('is-active');
+            io.unobserve(sec);
+          }
+        });
+      }, { threshold: 0.28 });
+      io.observe(sec);
+    })();
+  </script>
+
+  <!-- ── MASK-REVEAL UNIFIÉ : titres + eyebrows ────────────────────
+       Étiquette les éléments cibles avec data-anim-title /
+       data-anim-eyebrow, découpe les titres en mots (en préservant
+       les <em>), puis ajoute .is-in quand l'élément entre en vue. -->
+  <script>
+    (function () {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1) Marquer les titres concernés
+      const titleSelectors = [
+        '.hero__title',
+        '.specs__title',
+        '.lectures__title',
+        '.spaces__title',
+        '.amenities__title',
+        '.gallery__title',
+        '.location__title',
+        '.contact__title'
+      ];
+      const titles = document.querySelectorAll(titleSelectors.join(','));
+      titles.forEach((t) => t.setAttribute('data-anim-title', ''));
+
+      // 2) Marquer les eyebrows
+      const eyebrowSelectors = [
+        '.amenities__eyebrow',
+        '.films-fs__eyebrow',
+        '.contact__eyebrow',
+        '.lecture-row__eyebrow',
+        '.cinemo__eyebrow'
+      ];
+      document.querySelectorAll(eyebrowSelectors.join(',')).forEach((e) => {
+        e.setAttribute('data-anim-eyebrow', '');
+      });
+
+      // 3) Découper chaque titre en mots, en respectant les <em>/<br>/<span>
+      function makeWord(text) {
+        const mask = document.createElement('span');
+        mask.className = 'aw';
+        const inner = document.createElement('span');
+        inner.className = 'aw-i';
+        inner.textContent = text;
+        mask.appendChild(inner);
+        return mask;
+      }
+      function splitNode(node) {
+        const out = [];
+        Array.from(node.childNodes).forEach((child) => {
+          if (child.nodeType === 3) {
+            // text node : split en mots + conserver les espaces
+            const parts = child.textContent.split(/(\s+)/);
+            parts.forEach((p) => {
+              if (!p) return;
+              if (/^\s+$/.test(p)) {
+                out.push(document.createTextNode(' '));
+              } else {
+                out.push(makeWord(p));
+              }
+            });
+          } else if (child.nodeType === 1) {
+            // element : on clone le tag (em, span, br…) et on recurse à l'intérieur
+            const tag = child.tagName.toLowerCase();
+            if (tag === 'br') {
+              out.push(document.createElement('br'));
+              return;
+            }
+            const clone = child.cloneNode(false);
+            const sub = splitNode(child);
+            sub.forEach((s) => clone.appendChild(s));
+            out.push(clone);
+          }
+        });
+        return out;
+      }
+
+      titles.forEach((t) => {
+        const split = splitNode(t);
+        t.innerHTML = '';
+        split.forEach((s) => t.appendChild(s));
+        // index --i sur chaque mot pour la cascade
+        t.querySelectorAll('.aw').forEach((w, i) => w.style.setProperty('--i', i));
+        t.classList.add('is-prepared');
+      });
+
+      // 4) Reveal : reduced-motion → on les marque immédiatement.
+      if (reduced) {
+        titles.forEach((t) => t.classList.add('is-in'));
+        document.querySelectorAll('[data-anim-eyebrow]').forEach((e) => e.classList.add('is-in'));
+        return;
+      }
+
+      // 4a) Hero : on déclenche au load (pas de scroll requis)
+      const hero = document.querySelector('.hero__title[data-anim-title]');
+      if (hero) {
+        requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('is-in')));
+      }
+
+      // 4b) Autres titres + eyebrows : IntersectionObserver
+      if (!('IntersectionObserver' in window)) {
+        titles.forEach((t) => t.classList.add('is-in'));
+        document.querySelectorAll('[data-anim-eyebrow]').forEach((e) => e.classList.add('is-in'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+      titles.forEach((t) => { if (t !== hero) io.observe(t); });
+      document.querySelectorAll('[data-anim-eyebrow]').forEach((e) => io.observe(e));
+    })();
+  </script>
+
+  <!-- ── AMENITIES : icônes Lucide tracées en stroke draw-in.
+       Mesure la longueur de chaque path via getTotalLength(),
+       pose --len/--off en inline-style, puis ajoute .is-grid-in
+       sur la grille quand elle entre dans le viewport (CSS prend
+       le relais pour le stagger). -->
+  <script>
+    (function () {
+      const grid = document.querySelector('.amenities__grid');
+      if (!grid) return;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const paths = grid.querySelectorAll('.amenity__icon path');
+      paths.forEach((p) => {
+        let len = 200;
+        try {
+          const got = p.getTotalLength();
+          if (got && isFinite(got)) len = Math.ceil(got);
+        } catch (_) { /* ignore */ }
+        p.style.setProperty('--len', len);
+        p.style.setProperty('--off', len);
+      });
+      if (reduced || !('IntersectionObserver' in window)) {
+        grid.classList.add('is-grid-in');
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            grid.classList.add('is-grid-in');
+            io.unobserve(grid);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      io.observe(grid);
+    })();
+  </script>
+
+  <!-- ── INK CURSOR : point ink qui suit la souris en lerp,
+       grandit en cercle ouvert au-dessus des éléments interactifs.
+       Inactif sur tactile, pointer coarse ou reduced-motion. -->
+  <script>
+    (function () {
+      const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!finePointer || reduced) return;
+
+      const cursor = document.createElement('div');
+      cursor.className = 'ink-cursor';
+      document.body.appendChild(cursor);
+      document.body.classList.add('has-ink-cursor');
+
+      let tx = -100, ty = -100;     // target (souris)
+      let cx = -100, cy = -100;     // current (lerp)
+      let ready = false;
+      const LERP = 0.22;
+
+      window.addEventListener('mousemove', (e) => {
+        tx = e.clientX; ty = e.clientY;
+        if (!ready) {
+          cx = tx; cy = ty;
+          cursor.classList.add('is-ready');
+          ready = true;
+        }
+      }, { passive: true });
+      window.addEventListener('mousedown', () => cursor.classList.add('is-pressed'));
+      window.addEventListener('mouseup',   () => cursor.classList.remove('is-pressed'));
+      window.addEventListener('mouseleave', () => cursor.classList.remove('is-ready'));
+      window.addEventListener('mouseenter', () => { if (ready) cursor.classList.add('is-ready'); });
+
+      function frame() {
+        cx += (tx - cx) * LERP;
+        cy += (ty - cy) * LERP;
+        cursor.style.transform =
+          'translate3d(' + cx.toFixed(2) + 'px, ' + cy.toFixed(2) + 'px, 0) translate(-50%, -50%)';
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      // Détection hover : on délègue au document plutôt que de poser N listeners.
+      const HOVER_SEL = [
+        'a[href]', 'button', '[role="button"]',
+        '.amenity', '.lecture-row', '.ff-card', '.space',
+        '.gallery__item', '.lightbox__btn', '.lightbox__close',
+        '.cta', '.nav__link', '.nav__cta', '.contact__link',
+        '.contact__phone-cta', '.scrub__cta'
+      ].join(',');
+
+      document.addEventListener('mouseover', (e) => {
+        if (e.target && e.target.closest && e.target.closest(HOVER_SEL)) {
+          cursor.classList.add('is-hover');
+        }
+      });
+      document.addEventListener('mouseout', (e) => {
+        if (e.target && e.target.closest && e.target.closest(HOVER_SEL)) {
+          // ne retire que si on quitte vers un non-hover element
+          const to = e.relatedTarget;
+          if (!to || !to.closest || !to.closest(HOVER_SEL)) {
+            cursor.classList.remove('is-hover');
+          }
+        }
+      });
+    })();
+  </script>
+
+  <!-- ── LIGHTBOX CROSSFADE : intercepte les changements de src de
+       l'image (déclenchés par script.js → openLB/navLB) via
+       MutationObserver, et fait un fondu enchaîné avec une copie
+       absolue de l'ancienne image qui s'efface. -->
+  <script>
+    (function () {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // Attendre que script.js ait créé la lightbox (il l'append en JS).
+      function init() {
+        const lbImg = document.querySelector('.lightbox .lightbox__img');
+        if (!lbImg) return setTimeout(init, 200);
+        const lightbox = lbImg.closest('.lightbox');
+
+        // Prépare le calque .lightbox__img-ghost : copie absolue derrière.
+        const css = document.createElement('style');
+        css.textContent =
+          '.lightbox__img { transition: opacity 0.55s cubic-bezier(0.19, 1, 0.22, 1), transform var(--t-fast) var(--ease-out) !important; }' +
+          '.lightbox__img-ghost {' +
+          '  position: absolute; top: 50%; left: 50%;' +
+          '  transform: translate(-50%, -50%) scale(1);' +
+          '  max-width: 92vw; max-height: 88vh;' +
+          '  object-fit: contain; border-radius: 2px;' +
+          '  opacity: 1;' +
+          '  transition: opacity 0.55s cubic-bezier(0.19, 1, 0.22, 1);' +
+          '  pointer-events: none;' +
+          '}' +
+          '.lightbox__img-ghost.is-fading { opacity: 0; }';
+        document.head.appendChild(css);
+
+        let prevSrc = lbImg.getAttribute('src') || '';
+        const mo = new MutationObserver((mutations) => {
+          mutations.forEach((m) => {
+            if (m.type !== 'attributes' || m.attributeName !== 'src') return;
+            const newSrc = lbImg.getAttribute('src') || '';
+            if (!newSrc || newSrc === prevSrc) return;
+            // Si la lightbox vient juste de s'ouvrir (ancien vide), pas de ghost.
+            if (prevSrc) {
+              const ghost = document.createElement('img');
+              ghost.className = 'lightbox__img-ghost';
+              ghost.src = prevSrc;
+              ghost.alt = '';
+              lightbox.appendChild(ghost);
+              // Fade-out à la frame suivante pour que la transition s'arme.
+              requestAnimationFrame(() => requestAnimationFrame(() => ghost.classList.add('is-fading')));
+              setTimeout(() => { if (ghost.parentNode) ghost.parentNode.removeChild(ghost); }, 700);
+            }
+            // Force un fade-in propre de la nouvelle image (la classe is-open
+            // de script.js gère déjà opacity:1, on s'appuie sur la transition).
+            lbImg.style.opacity = '0';
+            const onLoad = () => {
+              lbImg.style.opacity = '';
+              lbImg.removeEventListener('load', onLoad);
+            };
+            lbImg.addEventListener('load', onLoad);
+            prevSrc = newSrc;
+          });
+        });
+        mo.observe(lbImg, { attributes: true, attributeOldValue: false, attributeFilter: ['src'] });
+      }
+      // Lance dès que possible mais après le DOMContentLoaded de script.js
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!-- Curseur personnalisé (point + bague qui suit) -->
+  <div class="cursor" data-cursor hidden aria-hidden="true">
+    <span class="cursor__ring"></span>
+    <span class="cursor__dot"></span>
+  </div>
+
+</body>
+</html>

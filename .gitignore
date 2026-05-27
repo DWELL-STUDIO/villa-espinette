@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+._*
+
+# Local agent files
+.claude/
+
+# Dossier source vide à la racine (legacy) — pas assets/images.
+/images/
+
+# Press-kit Christie's : matériel de référence local (logos + fonts source).
+# Les versions utilisées par le site sont déjà copiées dans assets/.
+press-kit-christie-s_2026/
+
+# Sources vidéo brutes (4K, lourdes). Seules les versions web-encodées dans
+# assets/videos sont nécessaires pour le site (hero.mp4 / orbit.mp4).
+assets/videos/HERO1.mp4
