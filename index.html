@@ -2828,6 +2828,9 @@
 
     // ── Page view
     track('page_view');
+    // Heartbeat — powers live-now on dashboard
+    setInterval(function() { track('heartbeat'); }, 45000);
+
 
     // ── Modal open/close
     var overlay   = document.getElementById('visit-modal');
