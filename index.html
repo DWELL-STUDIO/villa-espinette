@@ -1317,7 +1317,32 @@
       .amenities__grid { grid-template-columns: 1fr; }
       .amenity { border-right: 0 !important; }
     }
-  </style>
+  
+    /* ── Visit modal ───────────────────────────────── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:9000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal-card{background:#fff;border-radius:4px;padding:48px 44px 44px;width:min(520px,92vw);position:relative;transform:translateY(20px);transition:transform .35s cubic-bezier(.22,1,.36,1);max-height:90vh;overflow-y:auto}
+    .modal-overlay.open .modal-card{transform:translateY(0)}
+    .modal-close{position:absolute;top:20px;right:20px;background:none;border:none;cursor:pointer;font-size:16px;color:#999;line-height:1;padding:4px 6px}
+    .modal-close:hover{color:#000}
+    .modal-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#aaa;margin:0 0 10px}
+    .modal-title{font-family:Gilroy,sans-serif;font-size:clamp(24px,3.5vw,32px);font-weight:700;color:#0d0d0d;margin:0 0 6px;line-height:1.1}
+    .modal-ref{font-family:'Space Mono',monospace;font-size:10px;color:#aaa;margin:0 0 28px;letter-spacing:.06em}
+    .mf{display:flex;flex-direction:column;gap:16px}
+    .mf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .mf-field{display:flex;flex-direction:column;gap:6px}
+    .mf-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#555}
+    .mf-input{font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 14px;border:0.5px solid #d0d0d0;border-radius:4px;outline:none;transition:border-color .2s,box-shadow .2s;background:#fff;color:#0d0d0d}
+    .mf-input:focus{border-color:#0d0d0d;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+    .mf-textarea{min-height:100px;resize:vertical}
+    .mf-submit{margin-top:8px;width:100%;justify-content:center;border:none;cursor:pointer;font-size:14px}
+    .mf-error{font-family:'Space Mono',monospace;font-size:11px;color:#c0392b;padding:8px 0}
+    .mf-success{text-align:center;padding:24px 0}
+    .mf-success-icon{display:block;font-size:32px;margin-bottom:12px}
+    .mf-success-title{font-family:Gilroy,sans-serif;font-size:22px;font-weight:700;color:#0d0d0d;margin:0 0 8px}
+    .mf-success-sub{font-family:'DM Sans',sans-serif;font-size:14px;color:#666;margin:0;line-height:1.6}
+    @media(max-width:480px){.mf-row{grid-template-columns:1fr}.modal-card{padding:36px 24px 32px}}
+</style>
 </head>
 
 <body>
@@ -2157,19 +2182,59 @@
               </li>
             </ul>
 
-            <a
-              href="mailto:sk@christiesrealestatebelgium.be?subject=Demande de visite — Villa Rhode-Saint-Genèse"
-              class="contact__cta-pill"
-            >
+            <button class="contact__cta-pill" id="visit-cta" type="button">
               <span>Organiser une visite</span>
               <svg class="contact__cta-arrow" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M13 5l7 7-7 7"/>
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       </div>
     </section>
+
+  <!-- ── VISIT MODAL ─────────────────────────────────────── -->
+  <div class="modal-overlay" id="visit-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <button class="modal-close" id="modal-close" aria-label="Fermer">✕</button>
+      <div id="modal-form-wrap">
+        <p class="modal-eyebrow">— Visite privée</p>
+        <h2 class="modal-title" id="modal-title">Demander une visite</h2>
+        <p class="modal-ref">Villa Rhode-Saint-Genèse · Réf. 12/0339 · Sylvie Koch</p>
+        <form class="mf" id="modal-form" novalidate>
+          <div class="mf-row">
+            <div class="mf-field">
+              <label class="mf-label" for="mf-name">Nom complet *</label>
+              <input class="mf-input" type="text" id="mf-name" placeholder="Jean Dupont" autocomplete="name" required>
+            </div>
+            <div class="mf-field">
+              <label class="mf-label" for="mf-phone">Téléphone</label>
+              <input class="mf-input" type="tel" id="mf-phone" placeholder="+32 4xx xx xx xx" autocomplete="tel">
+            </div>
+          </div>
+          <div class="mf-field">
+            <label class="mf-label" for="mf-email">E-mail *</label>
+            <input class="mf-input" type="email" id="mf-email" placeholder="jean@exemple.be" autocomplete="email" required>
+          </div>
+          <div class="mf-field">
+            <label class="mf-label" for="mf-message">Message</label>
+            <textarea class="mf-input mf-textarea" id="mf-message" placeholder="Vos disponibilités, questions…"></textarea>
+          </div>
+          <div class="mf-error" id="mf-error" style="display:none"></div>
+          <button type="submit" class="contact__cta-pill mf-submit" id="mf-btn">
+            <span id="mf-btn-text">Envoyer ma demande</span>
+            <svg class="contact__cta-arrow" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+      <div class="mf-success" id="modal-success" style="display:none">
+        <span class="mf-success-icon">✓</span>
+        <p class="mf-success-title">Message envoyé</p>
+        <p class="mf-success-sub">Sylvie Koch vous contactera dans les plus brefs délais.<br>Réf. 12/0339 · Christie's International Real Estate</p>
+      </div>
+    </div>
+  </div>
+
   </main>
 
   <!-- ─────────────────────────────────────────────────────────
@@ -2699,6 +2764,146 @@
         init();
       }
     })();
+  </script>
+
+
+  <!-- DWELL Analytics -->
+  <script>
+  (function() {
+    var SB_URL  = 'https://kdzkffcqmutwojyauqtj.supabase.co';
+    var SB_KEY  = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
+    var PAGE_ID = 'villa-espinette';
+
+    function getDevice() {
+      var w = window.innerWidth;
+      return w < 768 ? 'mobile' : w < 1024 ? 'tablet' : 'desktop';
+    }
+    function getVisitorId() {
+      var key = 'dwell_vid';
+      var id  = localStorage.getItem(key);
+      if (!id) {
+        id = 'v_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    }
+    function track(event_type) {
+      fetch(SB_URL + '/rest/v1/events', {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          page_id:    PAGE_ID,
+          event_type: event_type,
+          device:     getDevice(),
+          referrer:   document.referrer || 'direct',
+          visitor_id: getVisitorId()
+        })
+      }).catch(function() {});
+    }
+
+    // ── Page view (fires on every load = Total Visits)
+    track('page_view');
+
+    // ── Heartbeat every 45s (powers "live now" on dashboard)
+    setInterval(function() { track('heartbeat'); }, 45000);
+
+    // ── Modal
+    var overlay  = document.getElementById('visit-modal');
+    var openBtn  = document.getElementById('visit-cta');
+    var closeBtn = document.getElementById('modal-close');
+
+    function openModal() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      track('modal_open');
+      setTimeout(function() {
+        var first = document.getElementById('mf-name');
+        if (first) first.focus();
+      }, 360);
+    }
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    if (openBtn)  openBtn.addEventListener('click', function(e) { e.preventDefault(); openModal(); });
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+    // ── Form submit → Supabase leads + email to Sylvie
+    var form = document.getElementById('modal-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name    = document.getElementById('mf-name').value.trim();
+        var email   = document.getElementById('mf-email').value.trim();
+        var phone   = document.getElementById('mf-phone').value.trim();
+        var message = document.getElementById('mf-message').value.trim();
+        var errEl   = document.getElementById('mf-error');
+        errEl.style.display = 'none';
+
+        if (!name || !email) {
+          errEl.textContent = 'Veuillez renseigner votre nom et e-mail.';
+          errEl.style.display = 'block';
+          return;
+        }
+
+        var btn     = document.getElementById('mf-btn');
+        var btnText = document.getElementById('mf-btn-text');
+        btn.disabled = true;
+        btnText.textContent = 'Envoi…';
+
+        var sbSave = fetch(SB_URL + '/rest/v1/leads', {
+          method: 'POST',
+          headers: {
+            'apikey': SB_KEY,
+            'Authorization': 'Bearer ' + SB_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            page_id:    PAGE_ID,
+            name:       name,
+            email:      email,
+            phone:      phone,
+            message:    message,
+            visitor_id: getVisitorId()
+          })
+        });
+
+        var emailSend = fetch('https://formsubmit.co/ajax/sk@christiesrealestatebelgium.be', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: 'Demande de visite — Villa Rhode-Saint-Genèse',
+            _replyto: email,
+            name:    name,
+            email:   email,
+            phone:   phone || '—',
+            message: message || '—'
+          })
+        });
+
+        Promise.all([sbSave, emailSend]).then(function(results) {
+          if (!results[0].ok && !results[1].ok) throw new Error('both failed');
+          track('form_submit');
+          document.getElementById('modal-form-wrap').style.display = 'none';
+          document.getElementById('modal-success').style.display   = 'block';
+        }).catch(function() {
+          btn.disabled = false;
+          btnText.textContent = 'Envoyer ma demande';
+          errEl.textContent = 'Une erreur est survenue. Veuillez nous contacter directement.';
+          errEl.style.display = 'block';
+        });
+      });
+    }
+  })();
   </script>
 
 </body>
