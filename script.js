@@ -838,6 +838,74 @@ window.addEventListener('DOMContentLoaded', () => {
       resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 200);
     });
   }
+
+  /* ───── Vidéos à démarrage différé (data-delay-play="ms") ─────
+     Démarre la vidéo X ms après son entrée dans le viewport.
+     Pause auto si elle ressort, reprend si elle réapparaît. */
+  document.querySelectorAll('video[data-delay-play]').forEach((video) => {
+    const delay = parseInt(video.dataset.delayPlay, 10) || 0;
+    video.muted = true;
+    video.playsInline = true;
+    let timer = 0;
+    let armed = false;
+
+    const tryPlay = () => {
+      if (!video.paused) return;
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      setTimeout(tryPlay, delay);
+      return;
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          if (armed) { tryPlay(); return; }
+          clearTimeout(timer);
+          timer = setTimeout(() => { armed = true; tryPlay(); }, delay);
+        } else {
+          clearTimeout(timer); timer = 0;
+          try { video.pause(); } catch (_) {}
+        }
+      });
+    }, { threshold: 0.15 });
+    io.observe(video);
+  });
+
+  /* ───── CINÉMA — fichier vidéo pré-inversé (hero-reverse.mp4) ─────
+     Le sens inverse est cuit dans le fichier (ffmpeg -vf reverse), donc
+     la lecture est forward + autoplay-loop natif : aucune saccade.
+     Autoplay forcé à chaque event utile + sur visibilité + 1re interaction. */
+  (function autoplayCinemoVideo() {
+    const video = document.querySelector('.cinemo__video');
+    if (!video) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+
+    const tryPlay = () => {
+      if (!video.paused) return;
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+    };
+
+    ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach((ev) => {
+      video.addEventListener(ev, tryPlay);
+    });
+    if (video.readyState >= 1) tryPlay();
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) tryPlay();
+    });
+
+    const onInteract = () => tryPlay();
+    document.addEventListener('click', onInteract, { passive: true });
+    document.addEventListener('touchstart', onInteract, { passive: true });
+    document.addEventListener('scroll', onInteract, { passive: true });
+  })();
 });
 
 /* ───────────────────────────────────────────────────────────────
@@ -1207,15 +1275,14 @@ window.addEventListener('DOMContentLoaded', () => {
     en: {
       /* Nav */
       'Mesures': 'Measures',
-      'Atlas': 'Atlas',
+      'Lectures': 'Readings',
       'Espaces': 'Spaces',
       'Galerie': 'Gallery',
       'Localisation': 'Location',
-      'Réservez votre visite': 'Book your visit',
+      'Organiser une visite': 'Arrange a viewing',
 
       /* Hero */
       'Rhode-Saint-Genèse · Belgique': 'Rhode-Saint-Genèse · Belgium',
-      'Disponible': 'Available',
       'Villa contemporaine': 'Contemporary villa',
       'Réf. 12/0339': 'Ref. 12/0339',
 
@@ -1237,14 +1304,14 @@ window.addEventListener('DOMContentLoaded', () => {
       'Contemporain & durable': 'Contemporary & sustainable',
       '1960, rénovée 2021-2022': '1960, renovated 2021-2022',
       'Vie de plain-pied': 'Single-storey living',
-      'A — exemplaire': 'A — exemplary',
+      'A · exemplaire': 'A · exemplary',
       'Gaz': 'Gas',
       '100 m² (cave à vins)': '100 m² (wine cellar)',
       '2 garages + 4 places': '2 garages + 4 spaces',
-      'Rhode-Saint-Genèse — Grande Espinette': 'Rhode-Saint-Genèse — Grande Espinette',
+      'Rhode-Saint-Genèse · Grande Espinette': 'Rhode-Saint-Genèse · Grande Espinette',
 
       /* Atlas / Spreads */
-      '— Atlas': '— Atlas',
+      '— Lectures': '— Readings',
       'La villa,': 'The villa,',
       'en quatre atmosphères.': 'in four atmospheres.',
       'Atmosphère 01': 'Atmosphere 01',
@@ -1258,7 +1325,7 @@ window.addEventListener('DOMContentLoaded', () => {
       "Au bout d'un cul-de-sac privé, sans aucun vis-à-vis.": 'At the end of a private cul-de-sac, with no overlook.',
       "L'esprit moderniste, en brique noire et verre.": 'A modernist spirit, in black brick and glass.',
       'Le jardin au rythme des saisons.': 'The garden through the seasons.',
-      "1 900 m² d'écrin paysager, sans vis-à-vis.": '1,900 m² of landscaped grounds, with no overlook.',
+      "1.900 m² d'écrin paysager, sans vis-à-vis.": '1.900 m² of landscaped grounds, with no overlook.',
       'Voir la nuit': 'See at night',
       'Voir le jour': 'See in daylight',
       '— Grande Espinette · Rhode-Saint-Genèse': '— Grande Espinette · Rhode-Saint-Genèse',
@@ -1269,7 +1336,7 @@ window.addEventListener('DOMContentLoaded', () => {
       /* Six univers */
       'Six univers,': 'Six worlds,',
       'un même langage.': 'one shared language.',
-      'Faites défiler — la villa se déploie horizontalement.': 'Scroll — the villa unfolds horizontally.',
+      'Faites défiler : la villa se déploie horizontalement.': 'Scroll: the villa unfolds horizontally.',
       'Le séjour traversant': 'The through-living room',
       'La cuisine contemporaine': 'The contemporary kitchen',
       'La suite parentale': 'The master suite',
@@ -1281,13 +1348,13 @@ window.addEventListener('DOMContentLoaded', () => {
       "Chambre, dressing et salle de bains attenante. Une suite de plain-pied, retirée du monde.": 'Bedroom, dressing room and en-suite bathroom. A single-level master suite, set apart from the world.',
       "Bassin extérieur, plage en pierre claire, ouvert sur le jardin et les haies taillées.": 'Outdoor pool, light-stone deck, opening onto the garden and the trimmed hedges.',
       "Climatisée, taillée pour les amateurs. Une parenthèse minérale au sous-sol.": 'Climate-controlled, made for enthusiasts. A mineral interlude in the basement.',
-      "2.420 m² de terrain en lisière des champs ouverts. Une sensation d'évasion, à dix minutes de Bruxelles.": '2,420 m² of land along the open fields. A sense of escape, ten minutes from Brussels.',
+      "2.420 m² de terrain en lisière des champs ouverts. Une sensation d'évasion, à dix minutes de Bruxelles.": '2.420 m² of land along the open fields. A sense of escape, ten minutes from Brussels.',
 
       /* Amenities */
       'Neuf raisons': 'Nine reasons',
       'de visiter.': 'to visit.',
-      'Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs — chaque détail compte.':
-        'A modernist villa renovated with care — generous volumes, single-storey living, and open views over the fields. Every detail counts.',
+      'Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs. Chaque détail compte.':
+        'A modernist villa renovated with care: generous volumes, single-storey living, and open views over the fields. Every detail counts.',
       'Architecture moderniste': 'Modernist architecture',
       'Rénovation et extension neuve, volumes contemporains.': 'Renovation and new extension, contemporary volumes.',
       'Vues sur les champs': 'Views over the fields',
@@ -1301,7 +1368,7 @@ window.addEventListener('DOMContentLoaded', () => {
       "Intégré à la villa, accès direct depuis l'entrée.": 'Integrated into the villa, direct access from the entrance.',
       'Cave à vins climatisée': 'Climate-controlled wine cellar',
       'Espace dédié, température maîtrisée.': 'Dedicated space, controlled temperature.',
-      '2.420 m² de terrain': '2,420 m² of land',
+      '2.420 m² de terrain': '2.420 m² of land',
       'Jardin, terrasse et nature environnante.': 'Garden, terrace and surrounding nature.',
       'Cul-de-sac': 'Cul-de-sac',
       'Aucune circulation, tranquillité absolue.': 'No traffic, absolute tranquility.',
@@ -1316,8 +1383,8 @@ window.addEventListener('DOMContentLoaded', () => {
       '— Le jour · la nuit': '— Day · night',
       'Une villa qui change': 'A villa that changes',
       'avec la lumière.': 'with the light.',
-      "Au plein soleil, les volumes blancs et la brique noire se découpent dans le vert du jardin. À la tombée du jour, les éclairages architecturaux prennent le relais — la maison devient scénographique. Faites glisser le curseur, ou basculez d'une lumière à l'autre.":
-        "In full sunlight, the white volumes and black brick stand out against the green garden. At nightfall, the architectural lighting takes over — the house becomes a stage. Drag the slider, or switch from one light to the other.",
+      "Au plein soleil, les volumes blancs et la brique noire se découpent dans le vert du jardin. À la tombée du jour, les éclairages architecturaux prennent le relais : la maison devient scénographique. Faites glisser le curseur, ou basculez d'une lumière à l'autre.":
+        "In full sunlight, the white volumes and black brick stand out against the green garden. At nightfall, the architectural lighting takes over: the house becomes a stage. Drag the slider, or switch from one light to the other.",
       'Jour': 'Day',
       'Nuit': 'Night',
       "Vue d'ensemble": 'Overall view',
@@ -1341,29 +1408,28 @@ window.addEventListener('DOMContentLoaded', () => {
       'Bureau': 'Office',
       'Mobile': 'Mobile',
       'E-mail': 'E-mail',
-      'Demander une visite': 'Request a viewing',
 
       /* Atlas — paragraphes longs */
-      "La villa occupe un terrain de 2 420 m² (dont 1 900 m² de jardin paysager) au bout d'une allée privée, dans le quartier prisé de la Grande Espinette. Calme absolu, environnement résidentiel de premier plan — à quinze minutes du centre de Bruxelles.":
-        "The villa sits on a 2,420 m² plot (1,900 m² of landscaped garden) at the end of a private driveway, in the sought-after Grande Espinette district. Absolute calm, a prime residential setting — only fifteen minutes from central Brussels.",
-      "Façade en brique noire ponctuée de grandes baies vitrées et d'un portail métallique en clair-obscur. L'extension contemporaine dialogue avec les volumes blancs originels — lignes nettes, matériaux durables, écriture cohérente du seuil aux pièces de vie.":
-        "Black-brick façade punctuated by large glass openings and a chiaroscuro metal gate. The contemporary extension converses with the original white volumes — crisp lines, durable materials, a coherent language from the threshold to the living spaces.",
-      "Bassin extérieur, plage en pierre claire, lounges intégrés sous les haies taillées. Orienté plein sud, le bassin profite du soleil toute l'après-midi ; au crépuscule, les éclairages immergés le transforment en miroir lumineux — scénographie discrète, comme une parenthèse sur le jardin.":
-        "Outdoor pool with light-stone deck, loungers tucked beside the trimmed hedges. South-facing, the pool catches sun all afternoon; at dusk, underwater lighting turns it into a luminous mirror — a discreet stage opening onto the garden.",
-      "Vaste pelouse engazonnée, rhododendrons en fleur, hêtres pourpres et haies de charme taillées encadrent la piscine. À la tombée du jour, l'éclairage architectural sculpte la façade arrière et le bassin — le jardin se prolonge naturellement la nuit, scène discrète et lumineuse.":
-        "Wide lawn, blooming rhododendrons, copper beeches and trimmed hornbeam hedges frame the pool. At nightfall, architectural lighting carves out the rear façade and the basin — the garden naturally extends into the night, a quiet luminous scene.",
+      "La villa occupe un terrain de 2.420 m² (dont 1.900 m² de jardin paysager) au bout d'une allée privée, dans le quartier prisé de la Grande Espinette. Calme absolu, environnement résidentiel de premier plan, à quinze minutes du centre de Bruxelles.":
+        "The villa sits on a 2.420 m² plot (1.900 m² of landscaped garden) at the end of a private driveway, in the sought-after Grande Espinette district. Absolute calm, a prime residential setting, only fifteen minutes from central Brussels.",
+      "Façade en brique noire ponctuée de grandes baies vitrées et d'un portail métallique en clair-obscur. L'extension contemporaine dialogue avec les volumes blancs originels : lignes nettes, matériaux durables, écriture cohérente du seuil aux pièces de vie.":
+        "Black-brick façade punctuated by large glass openings and a chiaroscuro metal gate. The contemporary extension converses with the original white volumes: crisp lines, durable materials, a coherent language from the threshold to the living spaces.",
+      "Bassin extérieur, plage en pierre claire, lounges intégrés sous les haies taillées. Orienté plein sud, le bassin profite du soleil toute l'après-midi ; au crépuscule, les éclairages immergés le transforment en miroir lumineux, scénographie discrète, comme une parenthèse sur le jardin.":
+        "Outdoor pool with light-stone deck, loungers tucked beside the trimmed hedges. South-facing, the pool catches sun all afternoon; at dusk, underwater lighting turns it into a luminous mirror, a discreet stage opening onto the garden.",
+      "Vaste pelouse engazonnée, rhododendrons en fleur, hêtres pourpres et haies de charme taillées encadrent la piscine. À la tombée du jour, l'éclairage architectural sculpte la façade arrière et le bassin. Le jardin se prolonge naturellement la nuit, scène discrète et lumineuse.":
+        "Wide lawn, blooming rhododendrons, copper beeches and trimmed hornbeam hedges frame the pool. At nightfall, architectural lighting carves out the rear façade and the basin. The garden naturally extends into the night, a quiet luminous scene.",
 
       /* Localisation — paragraphe */
       "Aux confins de la forêt de Soignes, dans un environnement verdoyant d'une rare tranquillité, la villa s'installe au bout d'un cul-de-sac sans aucune circulation. Sur 2.420 m² de terrain, face aux champs ouverts, à seulement quelques minutes de Bruxelles.":
-        "On the edge of the Sonian Forest, in a green setting of rare tranquility, the villa stands at the end of a traffic-free cul-de-sac. On 2,420 m² of land, facing open fields, just minutes from Brussels.",
+        "On the edge of the Sonian Forest, in a green setting of rare tranquility, the villa stands at the end of a traffic-free cul-de-sac. On 2.420 m² of land, facing open fields, just minutes from Brussels.",
 
-      /* Cinemo — "La maison qui regarde les champs." */
-      'La maison': 'The home',
-      'qui regarde': 'that looks out',
-      'les champs.': 'on the fields.',
-      'Depuis la terrasse, la cuisine et les espaces de réception, la maison dialogue en permanence avec le paysage. Une atmosphère paisible, presque vacancière — à seulement quelques minutes de Bruxelles.':
-        'From the terrace, the kitchen and the reception spaces, the home is in constant dialogue with the landscape. A peaceful, almost holiday-like atmosphere — only minutes from Brussels.',
-      '05 · Paysage': '05 · Landscape',
+      /* Cinemo — "Posée en lisière des champs." */
+      'Posée': 'Set',
+      'en lisière': 'at the edge',
+      'des champs.': 'of the fields.',
+      "Vue d'en haut, la villa se découvre cernée d'horizons ouverts : 2.420 m² de terrain qui se prolongent dans les champs, sans vis-à-vis. Une rareté à dix minutes de Bruxelles.":
+        "Seen from above, the villa reveals itself ringed by open horizons: 2.420 m² of land extending into the fields, with no overlook. A rarity ten minutes from Brussels.",
+      '05 · Les champs': '05 · The fields',
 
       /* Strip "Au bout du chemin" */
       'Au bout du chemin,': 'At the end of the path,',
@@ -1372,37 +1438,37 @@ window.addEventListener('DOMContentLoaded', () => {
         "At the end of a traffic-free cul-de-sac, the villa reveals itself in a green setting of rare tranquility. Open fields as horizon, only minutes from Brussels.",
 
       /* Modals : détails étendus (data-*-detail) — appelés via window.__i18nTr */
-      "Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre — depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.":
-        "The original white volumes converse with a contemporary black-brick extension. A modernist language reinterpreted with restraint, coherent from detail to detail — full-height glass openings, zinc roof, slim profile joinery.",
+      "Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre : depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.":
+        "The original white volumes converse with a contemporary black-brick extension. A modernist language reinterpreted with restraint, coherent from detail to detail: full-height glass openings, zinc roof, slim profile joinery.",
       "Depuis chaque pièce de réception, le regard se perd dans les champs ouverts. Une sensation d'évasion permanente, sans vis-à-vis, à seulement dix minutes du centre de Bruxelles. Aux beaux jours, la frontière entre intérieur et paysage s'estompe.":
         "From every reception room, the view loses itself in the open fields. A constant sense of escape, no overlook, only ten minutes from central Brussels. In fine weather, the boundary between interior and landscape softens.",
-      "Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir — sans escalier entre les pièces de vie.":
-        "Kitchen, living room, dining room and terrace align on a single level, crossed by southern light. An organisation designed for daily life as much as for entertaining — no stairs between the living spaces.",
+      "Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir, sans escalier entre les pièces de vie.":
+        "Kitchen, living room, dining room and terrace align on a single level, crossed by southern light. An organisation designed for daily life as much as for entertaining, no stairs between the living spaces.",
       "Suite parentale avec dressing en enfilade et salle de bains attenante, quatre chambres à l'étage et trois salles de bains au total. Pensé pour les familles ou pour recevoir confortablement.":
         "Master suite with linear dressing and en-suite bathroom, four bedrooms upstairs and three bathrooms in total. Designed for families or for comfortable hosting.",
-      "Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A — l'un des meilleurs niveaux de performance énergétique en Belgique.":
-        "Roof fitted with photovoltaic panels, EV charging station, reinforced insulation, high-efficiency gas heating. EPC A certificate — one of the best energy performance ratings in Belgium.",
+      "Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A : l'un des meilleurs niveaux de performance énergétique en Belgique.":
+        "Roof fitted with photovoltaic panels, EV charging station, reinforced insulation, high-efficiency gas heating. EPC A certificate: one of the best energy performance ratings in Belgium.",
       "Garage intégré à la villa avec accès direct par le hall. Espace généreux pour les vélos électriques et un véhicule compact (Citroën Ami inclus), parfait pour la mobilité urbaine du quotidien.":
         "Garage built into the villa with direct hallway access. Generous space for electric bikes and a compact vehicle (Citroën Ami included), perfect for daily urban mobility.",
       "Cave aux casiers triangulaires en chêne massif, climatisée et taillée pour les amateurs. Une parenthèse minérale et chaleureuse au sous-sol, accessible discrètement depuis la cuisine.":
         "Cellar with solid-oak triangular bottle racks, climate-controlled and built for enthusiasts. A warm mineral interlude in the basement, discreetly accessible from the kitchen.",
       "Un terrain de 2.420 m² en lisière des champs ouverts, parfaitement entretenu : grand jardin engazonné, terrasses, piscine et haies taillées. Une rareté à cette proximité immédiate de Bruxelles.":
-        "A 2,420 m² plot at the edge of open fields, immaculately kept: large lawn, terraces, pool and trimmed hedges. A rarity this close to Brussels.",
-      "Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes — à dix minutes du centre de Bruxelles.":
-        "At the end of a traffic-free cul-de-sac, in a prime residential setting. Absolute calm, security, direct access to the Sonian Forest — ten minutes from central Brussels.",
+        "A 2.420 m² plot at the edge of open fields, immaculately kept: large lawn, terraces, pool and trimmed hedges. A rarity this close to Brussels.",
+      "Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes, à dix minutes du centre de Bruxelles.":
+        "At the end of a traffic-free cul-de-sac, in a prime residential setting. Absolute calm, security, direct access to the Sonian Forest, ten minutes from central Brussels.",
 
       "Pièce traversante baignée de lumière du sud, ouverte sur la terrasse et les champs. Le séjour articule la vie de réception sans cloisonner : salon, cheminée, espace lecture et grandes baies coulissantes vers le jardin.":
         "Through-living room bathed in southern light, opening onto the terrace and the fields. The living space orchestrates entertaining without partitioning: lounge, fireplace, reading area and large sliding glass doors to the garden.",
-      "Cuisine entièrement équipée — îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.":
-        "Fully equipped kitchen — island, black-stone worktop, oak fronts. Open to the dining room and the terrace for summer meals. A kitchen made to cook in, to host in, and to look at the landscape.",
+      "Cuisine entièrement équipée : îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.":
+        "Fully equipped kitchen: island, black-stone worktop, oak fronts. Open to the dining room and the terrace for summer meals. A kitchen made to cook in, to host in, and to look at the landscape.",
       "Chambre principale ouverte sur le jardin par une baie toute hauteur, dressing en enfilade et salle de bains attenante en pierre claire. Une suite de plain-pied, retirée du reste de la maison, pensée comme une parenthèse.":
-        "Master bedroom opening onto the garden through a full-height window, linear dressing and en-suite bathroom in light stone. A single-level suite, set apart from the rest of the home — designed as a private retreat.",
-      "Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité — pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.":
-        "Infinity outdoor pool, carved into the light-stone terrace. Generous deck for loungers, basketball hoop nearby — designed for long summer days as much as for early-morning swims. At dusk, underwater lighting turns the basin into a luminous mirror.",
+        "Master bedroom opening onto the garden through a full-height window, linear dressing and en-suite bathroom in light stone. A single-level suite, set apart from the rest of the home, designed as a private retreat.",
+      "Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité, pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.":
+        "Infinity outdoor pool, carved into the light-stone terrace. Generous deck for loungers, basketball hoop nearby, designed for long summer days as much as for early-morning swims. At dusk, underwater lighting turns the basin into a luminous mirror.",
       "Cave en triangulation chêne massif, climatisée, taillée pour les amateurs. Une parenthèse minérale et chaleureuse au sous-sol, accessible discrètement depuis la cuisine. Capacité généreuse, éclairage muséal.":
         "Solid-oak triangulated wine cellar, climate-controlled, built for enthusiasts. A warm mineral interlude in the basement, discreetly accessible from the kitchen. Generous capacity, museum-grade lighting.",
-      "2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts — à dix minutes de Bruxelles.":
-        "2,420 m² of land along the open fields, immaculately kept: wide lawns, trimmed hedges, pool and terraces. No overlook, an unobstructed horizon over the fields — ten minutes from Brussels.",
+      "2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts, à dix minutes de Bruxelles.":
+        "2.420 m² of land along the open fields, immaculately kept: wide lawns, trimmed hedges, pool and terraces. No overlook, an unobstructed horizon over the fields, ten minutes from Brussels.",
 
       /* Footer */
       '© 2026': '© 2026',
@@ -1411,15 +1477,14 @@ window.addEventListener('DOMContentLoaded', () => {
     nl: {
       /* Nav */
       'Mesures': 'Kenmerken',
-      'Atlas': 'Atlas',
+      'Lectures': 'Lezingen',
       'Espaces': 'Ruimtes',
       'Galerie': 'Galerij',
       'Localisation': 'Locatie',
-      'Réservez votre visite': 'Plan uw bezoek',
+      'Organiser une visite': 'Een bezoek plannen',
 
       /* Hero */
       'Rhode-Saint-Genèse · Belgique': 'Rhode-Saint-Genesius-Rode · België',
-      'Disponible': 'Beschikbaar',
       'Villa contemporaine': 'Hedendaagse villa',
       'Réf. 12/0339': 'Ref. 12/0339',
 
@@ -1441,14 +1506,14 @@ window.addEventListener('DOMContentLoaded', () => {
       'Contemporain & durable': 'Hedendaags & duurzaam',
       '1960, rénovée 2021-2022': '1960, gerenoveerd 2021-2022',
       'Vie de plain-pied': 'Gelijkvloers leven',
-      'A — exemplaire': 'A — uitmuntend',
+      'A · exemplaire': 'A · uitmuntend',
       'Gaz': 'Gas',
       '100 m² (cave à vins)': '100 m² (wijnkelder)',
       '2 garages + 4 places': '2 garages + 4 plaatsen',
-      'Rhode-Saint-Genèse — Grande Espinette': 'Sint-Genesius-Rode — Grote Hut',
+      'Rhode-Saint-Genèse · Grande Espinette': 'Sint-Genesius-Rode · Grote Hut',
 
       /* Atlas / Spreads */
-      '— Atlas': '— Atlas',
+      '— Lectures': '— Lezingen',
       'La villa,': 'De villa,',
       'en quatre atmosphères.': 'in vier sferen.',
       'Atmosphère 01': 'Sfeer 01',
@@ -1462,7 +1527,7 @@ window.addEventListener('DOMContentLoaded', () => {
       "Au bout d'un cul-de-sac privé, sans aucun vis-à-vis.": 'Aan het einde van een privédoodlopende straat, zonder inkijk.',
       "L'esprit moderniste, en brique noire et verre.": 'Modernistische geest, in zwarte baksteen en glas.',
       'Le jardin au rythme des saisons.': 'De tuin op het ritme van de seizoenen.',
-      "1 900 m² d'écrin paysager, sans vis-à-vis.": '1 900 m² aangelegde tuin, zonder inkijk.',
+      "1.900 m² d'écrin paysager, sans vis-à-vis.": '1.900 m² aangelegde tuin, zonder inkijk.',
       'Voir la nuit': "'s Nachts bekijken",
       'Voir le jour': 'Overdag bekijken',
       '— Grande Espinette · Rhode-Saint-Genèse': '— Grote Hut · Sint-Genesius-Rode',
@@ -1473,7 +1538,7 @@ window.addEventListener('DOMContentLoaded', () => {
       /* Six univers */
       'Six univers,': 'Zes werelden,',
       'un même langage.': 'één gemeenschappelijke taal.',
-      'Faites défiler — la villa se déploie horizontalement.': 'Scroll — de villa ontvouwt zich horizontaal.',
+      'Faites défiler : la villa se déploie horizontalement.': 'Scroll: de villa ontvouwt zich horizontaal.',
       'Le séjour traversant': 'De doorlopende leefruimte',
       'La cuisine contemporaine': 'De hedendaagse keuken',
       'La suite parentale': 'De master-suite',
@@ -1485,13 +1550,13 @@ window.addEventListener('DOMContentLoaded', () => {
       "Chambre, dressing et salle de bains attenante. Une suite de plain-pied, retirée du monde.": 'Slaapkamer, dressing en aansluitende badkamer. Een gelijkvloerse suite, afgezonderd van de buitenwereld.',
       "Bassin extérieur, plage en pierre claire, ouvert sur le jardin et les haies taillées.": 'Buitenzwembad, terras in lichte natuursteen, open naar de tuin en gesnoeide hagen.',
       "Climatisée, taillée pour les amateurs. Une parenthèse minérale au sous-sol.": 'Geklimatiseerd, op maat voor liefhebbers. Een minerale onderbreking in de kelder.',
-      "2.420 m² de terrain en lisière des champs ouverts. Une sensation d'évasion, à dix minutes de Bruxelles.": '2 420 m² grond aan de rand van de open velden. Een gevoel van ontsnapping, op tien minuten van Brussel.',
+      "2.420 m² de terrain en lisière des champs ouverts. Une sensation d'évasion, à dix minutes de Bruxelles.": '2.420 m² grond aan de rand van de open velden. Een gevoel van ontsnapping, op tien minuten van Brussel.',
 
       /* Amenities */
       'Neuf raisons': 'Negen redenen',
       'de visiter.': 'om te bezoeken.',
-      'Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs — chaque détail compte.':
-        'Een zorgvuldig gerenoveerde modernistische villa — royale volumes, gelijkvloers leven en open uitzicht op de velden. Elk detail telt.',
+      'Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs. Chaque détail compte.':
+        'Een zorgvuldig gerenoveerde modernistische villa: royale volumes, gelijkvloers leven en open uitzicht op de velden. Elk detail telt.',
       'Architecture moderniste': 'Modernistische architectuur',
       'Rénovation et extension neuve, volumes contemporains.': 'Renovatie en nieuwbouw, hedendaagse volumes.',
       'Vues sur les champs': 'Uitzicht op de velden',
@@ -1505,7 +1570,7 @@ window.addEventListener('DOMContentLoaded', () => {
       "Intégré à la villa, accès direct depuis l'entrée.": 'Geïntegreerd in de villa, directe toegang vanuit de inkom.',
       'Cave à vins climatisée': 'Geklimatiseerde wijnkelder',
       'Espace dédié, température maîtrisée.': 'Aparte ruimte, beheerste temperatuur.',
-      '2.420 m² de terrain': '2 420 m² grond',
+      '2.420 m² de terrain': '2.420 m² grond',
       'Jardin, terrasse et nature environnante.': 'Tuin, terras en omringende natuur.',
       'Cul-de-sac': 'Doodlopende straat',
       'Aucune circulation, tranquillité absolue.': 'Geen verkeer, absolute rust.',
@@ -1520,8 +1585,8 @@ window.addEventListener('DOMContentLoaded', () => {
       '— Le jour · la nuit': '— Dag · nacht',
       'Une villa qui change': 'Een villa die verandert',
       'avec la lumière.': 'met het licht.',
-      "Au plein soleil, les volumes blancs et la brique noire se découpent dans le vert du jardin. À la tombée du jour, les éclairages architecturaux prennent le relais — la maison devient scénographique. Faites glisser le curseur, ou basculez d'une lumière à l'autre.":
-        'In volle zon steken de witte volumes en de zwarte baksteen af tegen het groen van de tuin. Bij valavond neemt de architecturale verlichting het over — het huis wordt scenografisch. Sleep de cursor, of schakel tussen de twee lichten.',
+      "Au plein soleil, les volumes blancs et la brique noire se découpent dans le vert du jardin. À la tombée du jour, les éclairages architecturaux prennent le relais : la maison devient scénographique. Faites glisser le curseur, ou basculez d'une lumière à l'autre.":
+        'In volle zon steken de witte volumes en de zwarte baksteen af tegen het groen van de tuin. Bij valavond neemt de architecturale verlichting het over: het huis wordt scenografisch. Sleep de cursor, of schakel tussen de twee lichten.',
       'Jour': 'Dag',
       'Nuit': 'Nacht',
       "Vue d'ensemble": 'Overzicht',
@@ -1545,29 +1610,28 @@ window.addEventListener('DOMContentLoaded', () => {
       'Bureau': 'Kantoor',
       'Mobile': 'GSM',
       'E-mail': 'E-mail',
-      'Demander une visite': 'Een bezoek aanvragen',
 
       /* Atlas — paragraphes longs */
-      "La villa occupe un terrain de 2 420 m² (dont 1 900 m² de jardin paysager) au bout d'une allée privée, dans le quartier prisé de la Grande Espinette. Calme absolu, environnement résidentiel de premier plan — à quinze minutes du centre de Bruxelles.":
-        "De villa staat op een perceel van 2 420 m² (waarvan 1 900 m² aangelegde tuin) aan het einde van een privéoprit, in de gegeerde wijk Grote Hut. Absolute rust, residentieel topkader — op slechts vijftien minuten van het centrum van Brussel.",
-      "Façade en brique noire ponctuée de grandes baies vitrées et d'un portail métallique en clair-obscur. L'extension contemporaine dialogue avec les volumes blancs originels — lignes nettes, matériaux durables, écriture cohérente du seuil aux pièces de vie.":
-        "Gevel in zwarte baksteen, doorbroken door grote glaspartijen en een metalen poort in clair-obscur. De hedendaagse uitbreiding voert dialoog met de oorspronkelijke witte volumes — strakke lijnen, duurzame materialen, coherent ontwerp van de drempel tot de leefruimten.",
-      "Bassin extérieur, plage en pierre claire, lounges intégrés sous les haies taillées. Orienté plein sud, le bassin profite du soleil toute l'après-midi ; au crépuscule, les éclairages immergés le transforment en miroir lumineux — scénographie discrète, comme une parenthèse sur le jardin.":
-        "Buitenzwembad met terras in lichte natuursteen, lounges onder de gesnoeide hagen. Pal zuid georiënteerd, het bad geniet de hele namiddag van de zon; bij valavond veranderen de onderwaterspots het in een lichtende spiegel — een discrete scenografie, een onderbreking op de tuin.",
-      "Vaste pelouse engazonnée, rhododendrons en fleur, hêtres pourpres et haies de charme taillées encadrent la piscine. À la tombée du jour, l'éclairage architectural sculpte la façade arrière et le bassin — le jardin se prolonge naturellement la nuit, scène discrète et lumineuse.":
-        "Brede grasmat, bloeiende rododendrons, bruine beuken en gesnoeide haagbeukhagen omkaderen het zwembad. Bij valavond beeldhouwt de architecturale verlichting de achtergevel en het bad — de tuin loopt 's nachts moeiteloos door, een discreet lichtend tafereel.",
+      "La villa occupe un terrain de 2.420 m² (dont 1.900 m² de jardin paysager) au bout d'une allée privée, dans le quartier prisé de la Grande Espinette. Calme absolu, environnement résidentiel de premier plan, à quinze minutes du centre de Bruxelles.":
+        "De villa staat op een perceel van 2.420 m² (waarvan 1.900 m² aangelegde tuin) aan het einde van een privéoprit, in de gegeerde wijk Grote Hut. Absolute rust, residentieel topkader, op slechts vijftien minuten van het centrum van Brussel.",
+      "Façade en brique noire ponctuée de grandes baies vitrées et d'un portail métallique en clair-obscur. L'extension contemporaine dialogue avec les volumes blancs originels : lignes nettes, matériaux durables, écriture cohérente du seuil aux pièces de vie.":
+        "Gevel in zwarte baksteen, doorbroken door grote glaspartijen en een metalen poort in clair-obscur. De hedendaagse uitbreiding voert dialoog met de oorspronkelijke witte volumes: strakke lijnen, duurzame materialen, coherent ontwerp van de drempel tot de leefruimten.",
+      "Bassin extérieur, plage en pierre claire, lounges intégrés sous les haies taillées. Orienté plein sud, le bassin profite du soleil toute l'après-midi ; au crépuscule, les éclairages immergés le transforment en miroir lumineux, scénographie discrète, comme une parenthèse sur le jardin.":
+        "Buitenzwembad met terras in lichte natuursteen, lounges onder de gesnoeide hagen. Pal zuid georiënteerd, het bad geniet de hele namiddag van de zon; bij valavond veranderen de onderwaterspots het in een lichtende spiegel, een discrete scenografie, een onderbreking op de tuin.",
+      "Vaste pelouse engazonnée, rhododendrons en fleur, hêtres pourpres et haies de charme taillées encadrent la piscine. À la tombée du jour, l'éclairage architectural sculpte la façade arrière et le bassin. Le jardin se prolonge naturellement la nuit, scène discrète et lumineuse.":
+        "Brede grasmat, bloeiende rododendrons, bruine beuken en gesnoeide haagbeukhagen omkaderen het zwembad. Bij valavond beeldhouwt de architecturale verlichting de achtergevel en het bad. De tuin loopt 's nachts moeiteloos door, een discreet lichtend tafereel.",
 
       /* Localisation — paragraphe */
       "Aux confins de la forêt de Soignes, dans un environnement verdoyant d'une rare tranquillité, la villa s'installe au bout d'un cul-de-sac sans aucune circulation. Sur 2.420 m² de terrain, face aux champs ouverts, à seulement quelques minutes de Bruxelles.":
-        "Aan de rand van het Zoniënwoud, in een groene omgeving van zeldzame rust, ligt de villa aan het einde van een doodlopende straat zonder verkeer. Op 2 420 m² grond, met uitzicht op de open velden, op slechts enkele minuten van Brussel.",
+        "Aan de rand van het Zoniënwoud, in een groene omgeving van zeldzame rust, ligt de villa aan het einde van een doodlopende straat zonder verkeer. Op 2.420 m² grond, met uitzicht op de open velden, op slechts enkele minuten van Brussel.",
 
-      /* Cinemo — "La maison qui regarde les champs." */
-      'La maison': 'Het huis',
-      'qui regarde': 'dat uitkijkt',
-      'les champs.': 'op de velden.',
-      'Depuis la terrasse, la cuisine et les espaces de réception, la maison dialogue en permanence avec le paysage. Une atmosphère paisible, presque vacancière — à seulement quelques minutes de Bruxelles.':
-        'Vanaf het terras, de keuken en de ontvangstruimten staat het huis voortdurend in dialoog met het landschap. Een rustige, bijna vakantiesfeer — op slechts enkele minuten van Brussel.',
-      '05 · Paysage': '05 · Landschap',
+      /* Cinemo — "Posée en lisière des champs." */
+      'Posée': 'Gelegen',
+      'en lisière': 'aan de rand',
+      'des champs.': 'van de velden.',
+      "Vue d'en haut, la villa se découvre cernée d'horizons ouverts : 2.420 m² de terrain qui se prolongent dans les champs, sans vis-à-vis. Une rareté à dix minutes de Bruxelles.":
+        "Van bovenaf gezien ontvouwt de villa zich, omringd door open horizonten: 2.420 m² grond die zich uitstrekt tot in de velden, zonder inkijk. Een zeldzaamheid op tien minuten van Brussel.",
+      '05 · Les champs': '05 · De velden',
 
       /* Strip "Au bout du chemin" */
       'Au bout du chemin,': 'Aan het einde van de weg,',
@@ -1576,37 +1640,37 @@ window.addEventListener('DOMContentLoaded', () => {
         "Aan het einde van een verkeersvrije doodlopende straat onthult de villa zich in een groen kader van zeldzame rust. De open velden als horizon, op enkele minuten van Brussel.",
 
       /* Modals : détails étendus (data-*-detail) */
-      "Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre — depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.":
-        "De originele witte volumes voeren dialoog met een hedendaagse uitbreiding in zwarte baksteen. Een modernistische taal subtiel herinterpreteerd, coherent in elk detail — van de glaspartijen op volle hoogte tot het zinken dak en het verfijnde schrijnwerk.",
+      "Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre : depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.":
+        "De originele witte volumes voeren dialoog met een hedendaagse uitbreiding in zwarte baksteen. Een modernistische taal subtiel herinterpreteerd, coherent in elk detail: van de glaspartijen op volle hoogte tot het zinken dak en het verfijnde schrijnwerk.",
       "Depuis chaque pièce de réception, le regard se perd dans les champs ouverts. Une sensation d'évasion permanente, sans vis-à-vis, à seulement dix minutes du centre de Bruxelles. Aux beaux jours, la frontière entre intérieur et paysage s'estompe.":
         "Vanuit elke ontvangstruimte verliest de blik zich in de open velden. Een permanent gevoel van ontsnapping, zonder inkijk, op slechts tien minuten van het centrum van Brussel. Bij mooi weer vervaagt de grens tussen interieur en landschap.",
-      "Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir — sans escalier entre les pièces de vie.":
-        "Keuken, woonkamer, eetkamer en terras liggen op één niveau, doorkruist door zuiderlicht. Een indeling bedacht voor het dagelijks leven én voor ontvangst — zonder trappen tussen de leefruimten.",
+      "Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir, sans escalier entre les pièces de vie.":
+        "Keuken, woonkamer, eetkamer en terras liggen op één niveau, doorkruist door zuiderlicht. Een indeling bedacht voor het dagelijks leven én voor ontvangst, zonder trappen tussen de leefruimten.",
       "Suite parentale avec dressing en enfilade et salle de bains attenante, quatre chambres à l'étage et trois salles de bains au total. Pensé pour les familles ou pour recevoir confortablement.":
         "Master-suite met aaneengeschakelde dressing en aansluitende badkamer, vier slaapkamers op de verdieping en drie badkamers in totaal. Ontworpen voor families of om comfortabel gasten te ontvangen.",
-      "Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A — l'un des meilleurs niveaux de performance énergétique en Belgique.":
-        "Dak met zonnepanelen, oplaadpunt voor elektrische wagens, versterkte isolatie, gasverwarming met hoog rendement. EPB-certificaat A — een van de beste energieprestatieniveaus in België.",
+      "Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A : l'un des meilleurs niveaux de performance énergétique en Belgique.":
+        "Dak met zonnepanelen, oplaadpunt voor elektrische wagens, versterkte isolatie, gasverwarming met hoog rendement. EPB-certificaat A: een van de beste energieprestatieniveaus in België.",
       "Garage intégré à la villa avec accès direct par le hall. Espace généreux pour les vélos électriques et un véhicule compact (Citroën Ami inclus), parfait pour la mobilité urbaine du quotidien.":
         "Garage geïntegreerd in de villa met directe toegang via de inkomhal. Royale ruimte voor elektrische fietsen en een compacte wagen (inclusief Citroën Ami), perfect voor dagelijkse stedelijke mobiliteit.",
       "Cave aux casiers triangulaires en chêne massif, climatisée et taillée pour les amateurs. Une parenthèse minérale et chaleureuse au sous-sol, accessible discrètement depuis la cuisine.":
         "Wijnkelder met driehoekige vakken in massief eik, geklimatiseerd en op maat voor liefhebbers. Een warme, minerale onderbreking in de kelder, discreet bereikbaar via de keuken.",
       "Un terrain de 2.420 m² en lisière des champs ouverts, parfaitement entretenu : grand jardin engazonné, terrasses, piscine et haies taillées. Une rareté à cette proximité immédiate de Bruxelles.":
-        "Een perceel van 2 420 m² aan de rand van de open velden, onberispelijk onderhouden: groot grasveld, terrassen, zwembad en gesnoeide hagen. Een zeldzaamheid op deze afstand van Brussel.",
-      "Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes — à dix minutes du centre de Bruxelles.":
-        "Aan het einde van een doodlopende straat zonder verkeer, in een residentiële topwijk. Absolute rust, veiligheid, directe toegang tot het Zoniënwoud — op tien minuten van het centrum van Brussel.",
+        "Een perceel van 2.420 m² aan de rand van de open velden, onberispelijk onderhouden: groot grasveld, terrassen, zwembad en gesnoeide hagen. Een zeldzaamheid op deze afstand van Brussel.",
+      "Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes, à dix minutes du centre de Bruxelles.":
+        "Aan het einde van een doodlopende straat zonder verkeer, in een residentiële topwijk. Absolute rust, veiligheid, directe toegang tot het Zoniënwoud, op tien minuten van het centrum van Brussel.",
 
       "Pièce traversante baignée de lumière du sud, ouverte sur la terrasse et les champs. Le séjour articule la vie de réception sans cloisonner : salon, cheminée, espace lecture et grandes baies coulissantes vers le jardin.":
         "Doorlopende leefruimte gebaad in zuiderlicht, open naar het terras en de velden. De living orkestreert het ontvangstleven zonder af te schermen: salon, haard, leeshoek en grote schuifpartijen naar de tuin.",
-      "Cuisine entièrement équipée — îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.":
-        "Volledig uitgeruste keuken — kookeiland, werkblad in zwarte natuursteen, eiken fronten. Open naar de eetkamer en het terras voor zomerse maaltijden. Een keuken om in te koken, in te ontvangen en het landschap in te kijken.",
+      "Cuisine entièrement équipée : îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.":
+        "Volledig uitgeruste keuken: kookeiland, werkblad in zwarte natuursteen, eiken fronten. Open naar de eetkamer en het terras voor zomerse maaltijden. Een keuken om in te koken, in te ontvangen en het landschap in te kijken.",
       "Chambre principale ouverte sur le jardin par une baie toute hauteur, dressing en enfilade et salle de bains attenante en pierre claire. Une suite de plain-pied, retirée du reste de la maison, pensée comme une parenthèse.":
-        "Hoofdslaapkamer open naar de tuin via een glaspartij op volle hoogte, aaneengeschakelde dressing en aansluitende badkamer in lichte natuursteen. Een gelijkvloerse suite, afgezonderd van de rest van het huis — bedoeld als een onderbreking.",
-      "Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité — pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.":
-        "Buiteninfinity-zwembad, uitgesneden in het lichte natuursteen van het terras. Royaal terras voor ligzetels, basketbalring in de buurt — bedacht voor lange zomerdagen én vroege ochtendzwemmen. Bij valavond veranderen de onderwaterspots het bad in een lichtende spiegel.",
+        "Hoofdslaapkamer open naar de tuin via een glaspartij op volle hoogte, aaneengeschakelde dressing en aansluitende badkamer in lichte natuursteen. Een gelijkvloerse suite, afgezonderd van de rest van het huis, bedoeld als een onderbreking.",
+      "Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité, pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.":
+        "Buiteninfinity-zwembad, uitgesneden in het lichte natuursteen van het terras. Royaal terras voor ligzetels, basketbalring in de buurt, bedacht voor lange zomerdagen én vroege ochtendzwemmen. Bij valavond veranderen de onderwaterspots het bad in een lichtende spiegel.",
       "Cave en triangulation chêne massif, climatisée, taillée pour les amateurs. Une parenthèse minérale et chaleureuse au sous-sol, accessible discrètement depuis la cuisine. Capacité généreuse, éclairage muséal.":
         "Wijnkelder in driehoekige opbouw uit massief eik, geklimatiseerd, op maat voor liefhebbers. Een warme, minerale onderbreking in de kelder, discreet bereikbaar via de keuken. Royale capaciteit, museale verlichting.",
-      "2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts — à dix minutes de Bruxelles.":
-        "2 420 m² grond aan de rand van de velden, onberispelijk onderhouden: ruime gazons, gesnoeide hagen, zwembad en terrassen. Geen inkijk, een onbelemmerde horizon op de open velden — op tien minuten van Brussel.",
+      "2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts, à dix minutes de Bruxelles.":
+        "2.420 m² grond aan de rand van de velden, onberispelijk onderhouden: ruime gazons, gesnoeide hagen, zwembad en terrassen. Geen inkijk, een onbelemmerde horizon op de open velden, op tien minuten van Brussel.",
 
       /* Footer */
       '© 2026': '© 2026',

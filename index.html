@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
   <title>Villa Rhode-Saint-Genèse — Christie's International Real Estate</title>
-  <meta name="description" content="Villa contemporaine durable à Rhode-Saint-Genèse (Grande Espinette), au bout d'un cul-de-sac. ±450 m² habitables, 2 420 m² de terrain, 5 chambres, 3 salles de bains, PEB A, panneaux photovoltaïques, piscine. Réf. 12/0339." />
+  <meta name="description" content="Villa contemporaine durable à Rhode-Saint-Genèse (Grande Espinette), au bout d'un cul-de-sac. ±450 m² habitables, 2.420 m² de terrain, 5 chambres, 3 salles de bains, PEB A, panneaux photovoltaïques, piscine. Réf. 12/0339." />
 
   <link rel="stylesheet" href="style.css" />
 
@@ -183,9 +183,9 @@
     video.hero__video, video.scrub__video, video.strip__video {
       width: 100%; height: 100%; object-fit: cover; pointer-events: none;
     }
-    /* Hero — légère désaturation (rendu plus mat, dans l'esprit Christie's) */
+    /* Hero — saturation rehaussée pour faire vibrer les verts du paysage */
     video.hero__video--vivid {
-      filter: saturate(0.88) contrast(1.06) brightness(1.02);
+      filter: saturate(1.30) contrast(1.08) brightness(1.02);
     }
     /* Voile hero légèrement allégé pour laisser passer la couleur sous le texte */
     .hero__veil {
@@ -686,6 +686,55 @@
       .cinemo__word { transform: none; transition: none; }
       .cinemo__eyebrow, .cinemo__lede { opacity: 1; transform: none; transition: none; }
       .cinemo__hairline { width: clamp(48px, 6vw, 96px); transition: none; }
+    }
+
+    /* ── Header de section 05 · Les champs — même style que « 04 · Film » ── */
+    .cinemo-head {
+      background: var(--canvas);
+      color: var(--ink);
+      padding: 0 clamp(0.5rem, 1.2vw, 1.4rem) clamp(4rem, 8vh, 6rem);
+    }
+    .cinemo-head .films-fs__head { margin-bottom: 0; }
+
+    /* ── CINÉMA — texte décalé à gauche, plus discret sur la vidéo ── */
+    .cinemo {
+      justify-content: flex-start;
+      padding-left: clamp(1.5rem, 6vw, 5.5rem);
+      padding-right: clamp(1.5rem, 4vw, 3rem);
+    }
+    .cinemo__inner {
+      text-align: left;
+      max-width: 460px;
+      margin: 0;
+      padding: clamp(1.2rem, 3vw, 2rem) 0;
+    }
+    .cinemo__eyebrow {
+      margin-bottom: clamp(1.1rem, 2.4vh, 1.6rem);
+    }
+    .cinemo__eyebrow::before { display: none; }
+    .cinemo__eyebrow::after { margin-left: 0.85rem; margin-right: 0; }
+    .cinemo__title {
+      font-size: clamp(1.9rem, 4vw, 3.4rem);
+      line-height: 1.02;
+      margin-bottom: clamp(1.1rem, 2.4vh, 1.6rem);
+    }
+    .cinemo__lede {
+      margin: 0;
+      max-width: none;
+      font-size: clamp(0.88rem, 1vw, 0.98rem);
+      line-height: 1.6;
+    }
+    .cinemo__hairline { margin: clamp(1.2rem, 2.4vh, 1.8rem) 0 0; }
+    @media (max-width: 880px) {
+      .cinemo {
+        justify-content: center;
+        padding-left: clamp(1.5rem, 4vw, 3rem);
+        padding-right: clamp(1.5rem, 4vw, 3rem);
+      }
+      .cinemo__inner { text-align: center; margin: 0 auto; max-width: 90vw; }
+      .cinemo__hairline { margin: clamp(1.6rem, 3vh, 2.4rem) auto 0; }
+      .cinemo__eyebrow::before { display: inline-block; }
+      .cinemo__eyebrow::after { margin-left: 0.85rem; margin-right: 0.85rem; }
     }
 
 
@@ -1268,102 +1317,6 @@
       .amenities__grid { grid-template-columns: 1fr; }
       .amenity { border-right: 0 !important; }
     }
-
-    /* ── Visit modal ─────────────────────────────────────────── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 9000;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal-overlay.open {
-      opacity: 1; pointer-events: all;
-    }
-    .modal-card {
-      background: var(--paper);
-      border-radius: 16px;
-      padding: clamp(2rem, 5vw, 3rem);
-      width: 100%; max-width: 480px;
-      position: relative;
-      transform: translateY(20px) scale(0.98);
-      transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 32px 80px rgba(0,0,0,0.25);
-    }
-    .modal-overlay.open .modal-card {
-      transform: translateY(0) scale(1);
-    }
-    .modal-close {
-      position: absolute; top: 1.25rem; right: 1.25rem;
-      background: none; border: none; cursor: pointer;
-      width: 32px; height: 32px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--stone); font-size: 18px; line-height: 1;
-      transition: background var(--t-fast);
-    }
-    .modal-close:hover { background: var(--beige); }
-    .modal-eyebrow {
-      font-family: var(--sans);
-      font-size: 0.68rem; letter-spacing: 0.16em;
-      text-transform: uppercase; color: var(--moss);
-      margin-bottom: 0.6rem;
-    }
-    .modal-title {
-      font-family: var(--display);
-      font-size: clamp(1.5rem, 3vw, 1.9rem);
-      font-style: italic; font-weight: 400;
-      line-height: 1.15; margin-bottom: 0.35rem;
-    }
-    .modal-ref {
-      font-size: 0.78rem; color: var(--stone);
-      margin-bottom: 2rem;
-    }
-    .mf { display: flex; flex-direction: column; gap: 1.4rem; }
-    .mf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    @media (max-width: 520px) { .mf-row { grid-template-columns: 1fr; } }
-    .mf-field { display: flex; flex-direction: column; gap: 0.4rem; }
-    .mf-label {
-      font-family: var(--sans); font-size: 0.68rem;
-      letter-spacing: 0.13em; text-transform: uppercase;
-      color: var(--stone);
-    }
-    .mf-input {
-      font-family: var(--sans); font-size: 0.92rem;
-      color: var(--ink); background: transparent;
-      border: none; border-bottom: 1px solid var(--line-strong);
-      padding: 0.5rem 0; outline: none; width: 100%;
-      transition: border-color var(--t-fast) var(--ease-out);
-      -webkit-appearance: none; resize: none;
-    }
-    .mf-input:focus { border-bottom-color: var(--moss); }
-    .mf-input::placeholder { color: var(--stone-3); }
-    .mf-textarea { min-height: 68px; }
-    .mf-submit {
-      width: 100%; justify-content: center;
-      cursor: pointer; border: none;
-      font-family: var(--sans);
-      margin-top: 0.5rem;
-    }
-    .mf-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    .mf-success {
-      text-align: center; padding: 1.5rem 0;
-    }
-    .mf-success-icon {
-      font-size: 2rem; margin-bottom: 0.75rem; display: block;
-    }
-    .mf-success-title {
-      font-family: var(--display); font-style: italic;
-      font-size: 1.3rem; margin-bottom: 0.5rem;
-    }
-    .mf-success-sub { font-size: 0.88rem; color: var(--stone); line-height: 1.5; }
-    .mf-error {
-      padding: 0.75rem 1rem;
-      background: #fff4f4; border: 1px solid #f0b8b8;
-      border-radius: 6px; font-size: 0.85rem; color: #a00;
-    }
   </style>
 </head>
 
@@ -1388,13 +1341,13 @@
         <span class="nav__pill-highlight"></span>
       </span>
       <a href="#mesures">Mesures</a>
-      <a href="#lectures">Atlas</a>
+      <a href="#lectures">Lectures</a>
       <a href="#espaces">Espaces</a>
       <a href="#galerie">Galerie</a>
       <a href="#localisation">Localisation</a>
     </nav>
     <div class="nav__right">
-      <a href="#contact" class="nav__cta">Réservez votre visite</a>
+      <a href="#contact" class="nav__cta">Organiser une visite</a>
       <!-- Sélecteur de langue : pill VERTICALE à droite du CTA -->
       <div class="lang lang--vertical" data-lang aria-label="Choisir la langue">
       <button type="button" class="lang__btn is-active" data-lang-set="fr" aria-label="Français" aria-pressed="true">
@@ -1435,14 +1388,14 @@
       <div class="hero__media">
         <video
           class="hero__video hero__video--vivid"
-          src="assets/videos/hero.mp4"
+          src="assets/videos/orbit.mp4"
           poster="assets/images/01.jpg"
           autoplay
           muted
           loop
           playsinline
           preload="auto"
-          aria-label="Survol cinématique de la villa à Rhode-Saint-Genèse"
+          aria-label="La villa et les champs ouverts — plan cinématique sur le paysage"
         ></video>
         <div class="hero__veil" aria-hidden="true"></div>
       </div>
@@ -1451,7 +1404,6 @@
       <div class="hero__top">
         <span class="hero__ref">Réf. 12/0339</span>
         <span class="hero__loc">Rhode-Saint-Genèse · Belgique</span>
-        <span class="hero__status"><span class="dot"></span>Disponible</span>
       </div>
 
       <!-- Statement -->
@@ -1523,11 +1475,11 @@
           class="strip__video strip__video--motion"
           src="assets/videos/strip-entree.mp4"
           poster="assets/images/02.jpg"
-          autoplay
           muted
           loop
           playsinline
           preload="auto"
+          data-delay-play="1000"
           aria-label="Arrivée à la villa, au bout du cul-de-sac"
         ></video>
 
@@ -1553,7 +1505,7 @@
     ────────────────────────────────────────────────────────── -->
     <section class="atlas" id="lectures" data-section="lectures">
       <header class="atlas__head reveal">
-        <span class="atlas__eyebrow" data-i18n="atlas.eyebrow">— Atlas</span>
+        <span class="atlas__eyebrow" data-i18n="atlas.eyebrow">— Lectures</span>
         <h2 class="atlas__title">
           La villa,
           <em>en quatre atmosphères.</em>
@@ -1576,10 +1528,10 @@
           <h3 class="spread__title"><em>L'aérien.</em></h3>
           <p class="spread__tag">Au bout d'un cul-de-sac privé, sans aucun vis-à-vis.</p>
           <p class="spread__body">
-            La villa occupe un terrain de 2&nbsp;420&nbsp;m² (dont 1&nbsp;900&nbsp;m²
+            La villa occupe un terrain de 2.420&nbsp;m² (dont 1.900&nbsp;m²
             de jardin paysager) au bout d'une allée privée, dans le quartier prisé
             de la Grande Espinette. Calme absolu, environnement résidentiel de premier
-            plan — à quinze minutes du centre de Bruxelles.
+            plan, à quinze minutes du centre de Bruxelles.
           </p>
           <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
             <span class="spread__toggle-icon" aria-hidden="true">
@@ -1612,7 +1564,7 @@
           <p class="spread__body">
             Façade en brique noire ponctuée de grandes baies vitrées et d'un portail
             métallique en clair-obscur. L'extension contemporaine dialogue avec les
-            volumes blancs originels — lignes nettes, matériaux durables, écriture
+            volumes blancs originels : lignes nettes, matériaux durables, écriture
             cohérente du seuil aux pièces de vie.
           </p>
           <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
@@ -1646,7 +1598,7 @@
           <p class="spread__body">
             Bassin extérieur, plage en pierre claire, lounges intégrés sous les haies
             taillées. Orienté plein sud, le bassin profite du soleil toute l'après-midi ;
-            au crépuscule, les éclairages immergés le transforment en miroir lumineux —
+            au crépuscule, les éclairages immergés le transforment en miroir lumineux,
             scénographie discrète, comme une parenthèse sur le jardin.
           </p>
           <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
@@ -1676,11 +1628,11 @@
             <span class="spread__line" aria-hidden="true"></span>
           </div>
           <h3 class="spread__title"><em>Le jardin.</em></h3>
-          <p class="spread__tag">1 900 m² d'écrin paysager, sans vis-à-vis.</p>
+          <p class="spread__tag">1.900 m² d'écrin paysager, sans vis-à-vis.</p>
           <p class="spread__body">
             Vaste pelouse engazonnée, rhododendrons en fleur, hêtres pourpres et haies
             de charme taillées encadrent la piscine. À la tombée du jour, l'éclairage
-            architectural sculpte la façade arrière et le bassin — le jardin se prolonge
+            architectural sculpte la façade arrière et le bassin. Le jardin se prolonge
             naturellement la nuit, scène discrète et lumineuse.
           </p>
           <button class="spread__toggle" type="button" data-spread-toggle aria-pressed="false">
@@ -1713,7 +1665,7 @@
           <em>un même langage.</em>
         </h2>
         <p class="spaces__sub">
-          Faites défiler — la villa se déploie horizontalement.
+          Faites défiler : la villa se déploie horizontalement.
         </p>
       </header>
 
@@ -1735,7 +1687,7 @@
           <article class="space" role="button" tabindex="0"
                    data-space
                    data-space-images="assets/images/08.jpg,assets/images/sp-cuisine-2.jpg"
-                   data-space-detail="Cuisine entièrement équipée — îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.">
+                   data-space-detail="Cuisine entièrement équipée : îlot, plan de travail en pierre noire, façades chêne. Ouverte sur la salle à manger et la terrasse pour les repas estivaux. Une cuisine pensée pour cuisiner, recevoir, et regarder le paysage.">
             <figure class="space__media"><img src="assets/images/08.jpg" alt="La cuisine contemporaine" loading="lazy" /></figure>
             <div class="space__text">
               <span class="space__num">02 / 06</span>
@@ -1759,7 +1711,7 @@
           <article class="space" role="button" tabindex="0"
                    data-space
                    data-space-images="assets/images/24.jpg,assets/images/25.jpg,assets/images/28.jpg,assets/images/33.jpg"
-                   data-space-detail="Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité — pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.">
+                   data-space-detail="Piscine extérieure à débordement, taillée dans la pierre claire de la terrasse. Plage généreuse pour les lounges, panier de basket à proximité, pensée pour les longues journées d'été comme pour la nage tôt le matin. Au crépuscule, les éclairages immergés transforment le bassin en miroir lumineux.">
             <figure class="space__media"><img src="assets/images/24.jpg" alt="La piscine" loading="lazy" /></figure>
             <div class="space__text">
               <span class="space__num">04 / 06</span>
@@ -1783,7 +1735,7 @@
           <article class="space" role="button" tabindex="0"
                    data-space
                    data-space-images="assets/images/03.jpg,assets/images/29.jpg,assets/images/31.jpg,assets/images/33.jpg"
-                   data-space-detail="2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts — à dix minutes de Bruxelles.">
+                   data-space-detail="2.420 m² de terrain en lisière des champs, parfaitement entretenu : grandes pelouses, haies taillées, piscine et terrasses. Pas de vis-à-vis, l'horizon dégagé sur les champs ouverts, à dix minutes de Bruxelles.">
             <figure class="space__media"><img src="assets/images/03.jpg" alt="Le jardin et les champs" loading="lazy" /></figure>
             <div class="space__text">
               <span class="space__num">06 / 06</span>
@@ -1851,7 +1803,7 @@
           <em>de visiter.</em>
         </h2>
         <p class="amenities__sub">
-          Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs — chaque détail compte.
+          Une villa moderniste rénovée avec soin, des volumes généreux, une vie de plain-pied et des vues ouvertes sur les champs. Chaque détail compte.
         </p>
       </header>
 
@@ -1860,7 +1812,7 @@
         <article class="amenity reveal" role="button" tabindex="0"
                  data-amenity
                  data-amenity-img="assets/images/am-architecture.jpg"
-                 data-amenity-detail="Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre — depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.">
+                 data-amenity-detail="Les volumes blancs originels dialoguent avec une extension contemporaine en brique noire. Une écriture moderniste réinterprétée avec retenue, cohérente d'un détail à l'autre : depuis les baies vitrées toute hauteur jusqu'à la toiture en zinc et aux menuiseries fines.">
           <div class="amenity__bg" aria-hidden="true">
             <img src="assets/images/am-architecture.jpg" alt="" loading="lazy" />
           </div>
@@ -1888,7 +1840,7 @@
         <article class="amenity reveal" role="button" tabindex="0"
                  data-amenity
                  data-amenity-img="assets/images/am-plain-pied.jpg"
-                 data-amenity-detail="Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir — sans escalier entre les pièces de vie.">
+                 data-amenity-detail="Cuisine, séjour, salle à manger et terrasse s'alignent sur un même niveau, traversés par la lumière du sud. Une organisation pensée pour le quotidien comme pour recevoir, sans escalier entre les pièces de vie.">
           <div class="amenity__bg" aria-hidden="true">
             <img src="assets/images/am-plain-pied.jpg" alt="" loading="lazy" />
           </div>
@@ -1917,7 +1869,7 @@
         <article class="amenity reveal" role="button" tabindex="0"
                  data-amenity
                  data-amenity-img="assets/images/am-peb.jpg"
-                 data-amenity-detail="Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A — l'un des meilleurs niveaux de performance énergétique en Belgique.">
+                 data-amenity-detail="Toiture équipée de panneaux photovoltaïques, borne de recharge pour véhicule électrique, isolation renforcée, chauffage gaz à haut rendement. Certificat PEB A : l'un des meilleurs niveaux de performance énergétique en Belgique.">
           <div class="amenity__bg" aria-hidden="true">
             <img src="assets/images/am-peb.jpg" alt="" loading="lazy" />
           </div>
@@ -1976,7 +1928,7 @@
         <article class="amenity reveal" role="button" tabindex="0"
                  data-amenity
                  data-amenity-img="assets/images/am-cul-de-sac.jpg"
-                 data-amenity-detail="Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes — à dix minutes du centre de Bruxelles.">
+                 data-amenity-detail="Au bout d'un cul-de-sac sans aucune circulation, dans un environnement résidentiel de premier plan. Calme absolu, sécurité, accès direct à la forêt de Soignes, à dix minutes du centre de Bruxelles.">
           <div class="amenity__bg" aria-hidden="true">
             <img src="assets/images/am-cul-de-sac.jpg" alt="" loading="lazy" />
           </div>
@@ -2045,7 +1997,16 @@
     </section>
 
     <!-- ─────────────────────────────────────────────────────────
-         04c · CINÉMA — plan unique, vidéo full-bleed, texte révélé
+         05 · Les champs — header de section, comme « 04 · Film »
+    ────────────────────────────────────────────────────────── -->
+    <section class="cinemo-head" data-section="cinema-head" aria-labelledby="cinemo-head-label">
+      <header class="films-fs__head reveal">
+        <span class="films-fs__eyebrow" id="cinemo-head-label">05 · Les champs</span>
+      </header>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────
+         05b · CINÉMA — plan unique, vidéo full-bleed, texte révélé
     ────────────────────────────────────────────────────────── -->
     <section class="cinemo" id="cinema" data-section="cinema">
       <!-- Unsharp mask SVG (kernel 3x3, somme=1) référencé par la vidéo. -->
@@ -2064,28 +2025,27 @@
       <div class="cinemo__media">
         <video
           class="cinemo__video"
-          src="assets/videos/orbit.mp4"
+          src="assets/videos/hero-reverse.mp4"
           poster="assets/images/01.jpg"
           autoplay
           muted
           loop
           playsinline
           preload="auto"
-          aria-label="Orbite cinématique autour de la villa"
+          aria-label="Survol cinématique de la villa en sens inverse"
         ></video>
       </div>
 
       <div class="cinemo__inner">
-        <span class="cinemo__eyebrow">05 · Paysage</span>
         <h2 class="cinemo__title">
-          <span class="cinemo__mask"><span class="cinemo__word">La maison</span></span>
-          <span class="cinemo__mask"><span class="cinemo__word">qui regarde</span></span>
-          <span class="cinemo__mask"><span class="cinemo__word"><em>les champs.</em></span></span>
+          <span class="cinemo__mask"><span class="cinemo__word">Posée</span></span>
+          <span class="cinemo__mask"><span class="cinemo__word">en lisière</span></span>
+          <span class="cinemo__mask"><span class="cinemo__word"><em>des champs.</em></span></span>
         </h2>
         <p class="cinemo__lede">
-          Depuis la terrasse, la cuisine et les espaces de réception, la maison
-          dialogue en permanence avec le paysage. Une atmosphère paisible,
-          presque vacancière — à seulement quelques minutes de Bruxelles.
+          Vue d'en haut, la villa se découvre cernée d'horizons ouverts :
+          2.420 m² de terrain qui se prolongent dans les champs, sans
+          vis-à-vis. Une rareté à dix minutes de Bruxelles.
         </p>
         <span class="cinemo__hairline"></span>
       </div>
@@ -2163,7 +2123,7 @@
         <div class="contact__grid">
           <figure class="contact__portrait reveal" data-photo-anim>
             <img
-              src="assets/images/sylvie.jpg"
+              src="assets/images/sylvie-koch.png"
               alt="Sylvie Koch — Christie's International Real Estate"
               loading="lazy"
             />
@@ -2197,62 +2157,20 @@
               </li>
             </ul>
 
-            <button class="contact__cta-pill" id="visit-cta" type="button">
-              <span>Demander une visite</span>
-              <span class="contact__cta-arrow" aria-hidden="true">→</span>
-            </button>
+            <a
+              href="mailto:sk@christiesrealestatebelgium.be?subject=Demande de visite — Villa Rhode-Saint-Genèse"
+              class="contact__cta-pill"
+            >
+              <span>Organiser une visite</span>
+              <svg class="contact__cta-arrow" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
     </section>
-  
-  <!-- ── VISIT MODAL ─────────────────────────────────────── -->
-  <div class="modal-overlay" id="visit-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-card">
-      <button class="modal-close" id="modal-close" aria-label="Fermer">✕</button>
-
-      <!-- Default state: form -->
-      <div id="modal-form-wrap">
-        <p class="modal-eyebrow">— Visite privée</p>
-        <h2 class="modal-title" id="modal-title">Demander une visite</h2>
-        <p class="modal-ref">Villa Rhode-Saint-Genèse · Réf. 12/0339 · Sylvie Koch</p>
-
-        <form class="mf" id="modal-form" novalidate>
-          <div class="mf-row">
-            <div class="mf-field">
-              <label class="mf-label" for="mf-name">Nom complet *</label>
-              <input class="mf-input" type="text" id="mf-name" placeholder="Jean Dupont" autocomplete="name" required>
-            </div>
-            <div class="mf-field">
-              <label class="mf-label" for="mf-phone">Téléphone</label>
-              <input class="mf-input" type="tel" id="mf-phone" placeholder="+32 4xx xx xx xx" autocomplete="tel">
-            </div>
-          </div>
-          <div class="mf-field">
-            <label class="mf-label" for="mf-email">E-mail *</label>
-            <input class="mf-input" type="email" id="mf-email" placeholder="jean@exemple.be" autocomplete="email" required>
-          </div>
-          <div class="mf-field">
-            <label class="mf-label" for="mf-message">Message</label>
-            <textarea class="mf-input mf-textarea" id="mf-message" placeholder="Vos disponibilités, questions…"></textarea>
-          </div>
-          <div class="mf-error" id="mf-error" style="display:none"></div>
-          <button type="submit" class="contact__cta-pill mf-submit" id="mf-btn">
-            <span id="mf-btn-text">Envoyer ma demande</span>
-            <span class="contact__cta-arrow" aria-hidden="true">→</span>
-          </button>
-        </form>
-      </div>
-
-      <!-- Success state -->
-      <div class="mf-success" id="modal-success" style="display:none">
-        <span class="mf-success-icon">✓</span>
-        <p class="mf-success-title">Message envoyé</p>
-        <p class="mf-success-sub">Sylvie Koch vous contactera dans les plus brefs délais.<br>Réf. 12/0339 · Christie's International Real Estate</p>
-      </div>
-    </div>
-  </div>
-</main>
+  </main>
 
   <!-- ─────────────────────────────────────────────────────────
        FOOTER
@@ -2783,157 +2701,5 @@
     })();
   </script>
 
-  <!-- DWELL Analytics -->
-  <script>
-  (function() {
-    var SB_URL = 'https://kdzkffcqmutwojyauqtj.supabase.co';
-    var SB_KEY = 'sb_publishable_XtBrgzqzM2GBOa-RNVH8uA_qfrPEaTd';
-    var PAGE_ID = 'villa-espinette';
-
-    function getDevice() {
-      var ua = navigator.userAgent;
-      if (/tablet|ipad/i.test(ua)) return 'tablet';
-      if (/mobi|android/i.test(ua)) return 'mobile';
-      return 'desktop';
-    }
-
-    function getVisitorId() {
-      var key = 'dwell_vid';
-      var id = localStorage.getItem(key);
-      if (!id) {
-        id = 'v_' + Math.random().toString(36).substr(2,9) + Date.now().toString(36);
-        localStorage.setItem(key, id);
-      }
-      return id;
-    }
-
-    function track(event_type) {
-      fetch(SB_URL + '/rest/v1/events', {
-        method: 'POST',
-        headers: {
-          'apikey': SB_KEY,
-          'Authorization': 'Bearer ' + SB_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({
-          page_id:    PAGE_ID,
-          event_type: event_type,
-          device:     getDevice(),
-          referrer:   document.referrer || 'direct',
-          visitor_id: getVisitorId()
-        })
-      }).catch(function() {});
-    }
-
-    // ── Page view
-    track('page_view');
-    // Heartbeat — powers live-now on dashboard
-    setInterval(function() { track('heartbeat'); }, 45000);
-
-
-    // ── Modal open/close
-    var overlay   = document.getElementById('visit-modal');
-    var openBtn   = document.getElementById('visit-cta');
-    var closeBtn  = document.getElementById('modal-close');
-
-    function openModal() {
-      overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      track('modal_open');
-      setTimeout(function() {
-        var first = document.getElementById('mf-name');
-        if (first) first.focus();
-      }, 360);
-    }
-
-    function closeModal() {
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    if (openBtn)  openBtn.addEventListener('click', function(e) { e.preventDefault(); openModal(); });
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeModal();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    // ── Form submit
-    var form = document.getElementById('modal-form');
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var name  = document.getElementById('mf-name').value.trim();
-        var email = document.getElementById('mf-email').value.trim();
-        var errEl = document.getElementById('mf-error');
-        errEl.style.display = 'none';
-
-        if (!name || !email) {
-          errEl.textContent = 'Veuillez renseigner votre nom et e-mail.';
-          errEl.style.display = 'block';
-          return;
-        }
-
-        var btn     = document.getElementById('mf-btn');
-        var btnText = document.getElementById('mf-btn-text');
-        btn.disabled = true;
-        btnText.textContent = 'Envoi…';
-
-        var phone   = document.getElementById('mf-phone').value.trim();
-        var message = document.getElementById('mf-message').value.trim();
-
-        var sbSave = fetch(SB_URL + '/rest/v1/leads', {
-          method: 'POST',
-          headers: {
-            'apikey': SB_KEY,
-            'Authorization': 'Bearer ' + SB_KEY,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
-          },
-          body: JSON.stringify({
-            page_id:    PAGE_ID,
-            name:       name,
-            email:      email,
-            phone:      phone,
-            message:    message,
-            visitor_id: getVisitorId()
-          })
-        });
-
-        var emailSend = fetch('https://formsubmit.co/ajax/sk@christiesrealestatebelgium.be', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            _subject: 'Demande de visite — Villa Rhode-Saint-Genèse',
-            _replyto: email,
-            name:    name,
-            email:   email,
-            phone:   phone || '—',
-            message: message || '—'
-          })
-        });
-
-        Promise.all([sbSave, emailSend]).then(function(results) {
-          var sbOk    = results[0].ok;
-          var emailOk = results[1].ok;
-          if (!sbOk && !emailOk) throw new Error('both failed');
-          track('form_submit');
-          document.getElementById('modal-form-wrap').style.display = 'none';
-          document.getElementById('modal-success').style.display   = 'block';
-        }).catch(function() {
-          btn.disabled = false;
-          btnText.textContent = 'Envoyer ma demande';
-          errEl.textContent = 'Une erreur est survenue. Veuillez nous contacter directement.';
-          errEl.style.display = 'block';
-        });
-      });
-    }
-  })();
-  </script>
 </body>
 </html>
