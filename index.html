@@ -2780,11 +2780,15 @@
     }
     function getVisitorId() {
       var key = 'dwell_vid';
-      var id  = localStorage.getItem(key);
+      // Cookies persist across Facebook/Instagram in-app browser sessions; localStorage does not
+      var cookieMatch = document.cookie.match('(?:^|;)\\s*' + key + '=([^;]+)');
+      var id = (cookieMatch && cookieMatch[1]) || localStorage.getItem(key);
       if (!id) {
         id = 'v_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
-        localStorage.setItem(key, id);
       }
+      var exp = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
+      try { document.cookie = key + '=' + id + '; expires=' + exp + '; path=/; SameSite=Lax'; } catch(e) {}
+      try { localStorage.setItem(key, id); } catch(e) {}
       return id;
     }
     function track(event_type) {
